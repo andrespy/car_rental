@@ -16,6 +16,10 @@ public:
     QDateTime getFin();
     void setFin(QDateTime fin);
 
+
+    string getId(){return _id;}
+    string getMatricula(){return _matricula;}
+
     Reserva & operator=(Reserva reserva);
     ~Reserva();
 private:

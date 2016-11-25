@@ -29,7 +29,7 @@ Vehiculo Cliente::vehiculoCercano()
 
 
 void Cliente::reservar()
-{   unsigned int opcionvehiculo;
+{   /*unsigned int opcionvehiculo;
 
     do{
         cout << "Los 10 vehiculos disponibles más cercanos a usted son:"<<endl;
@@ -37,9 +37,11 @@ void Cliente::reservar()
         cout << "Introduzca el numero del vehiculo que desea reservar: (Si desea cancelar la operacion escriba c)";
         cin  >> opcionvehiculo;
     }
-    while(opcionvehiculo>10 || opcionvehiculo<1 && opcionvehiculo != 'c');
-    //QDateTime fin(QDateTime.currentDateTime());
+    while(opcionvehiculo>10 || opcionvehiculo<1 && opcionvehiculo != 'c');*/
 
+
+    //QDateTime fin(QDateTime.currentDateTime());
+    /*
     cout<< "Introduce el tiempo de uso en dias:"<<endl;
     unsigned int dias;
 
@@ -48,6 +50,36 @@ void Cliente::reservar()
         //   Reserva reserva(this->getID(),QDateTime.currentDateTime(), fin,VehiculoCercano(this->getLocalizacion,opcionvehiculo)->getMatricula);
         //this->_plataforma->getReservas().push_back(reserva);
     }
+    */
+    string matricula;
+    do
+    {
+        do
+        {
+            cout << "Introduce la matrícula del coche que desea reservar: ";
+            cin >> matricula;
+            cout<<endl;
+            if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
+            else if(!_plataforma->buscarVehiculo(matricula)->getDisponible()) cout<<"Dicho vehiculo no esta disponible en estos momentos."<<endl;
+
+        }
+        while(!_plataforma->esVehiculo(matricula));
+    }
+    while(!_plataforma->buscarVehiculo(matricula)->getDisponible());
+
+    unsigned int dias;
+
+
+    cout << "Introduzca el numero de dias que desea que dure la reserva: ";
+    cin>> dias;
+
+    QDateTime inicio = QDateTime::currentDateTime();
+    QDateTime fin = QDateTime::currentDateTime();
+
+    Reserva reserva(_id,inicio,fin ,_plataforma->buscarVehiculo(matricula)->getMatricula());
+    _plataforma->getReservas().push_back(reserva);
+    _plataforma->buscarVehiculo(matricula)->setDisponible(0);
+    cout<<"¡Enhorabuena! Ha reservado el vehiculo " <<reserva.getMatricula()<<". Su reserva comprende hasta el día "<</*fin.date().dayOfWeek() <<" "<<*/fin.date().day()<<" de "<<fin.date().month()<< " de " << fin.date().year()<<endl;
 
 
 }
@@ -69,7 +101,7 @@ void        Cliente::menuCliente()
              <<"\tB. Obtener el coche más cercano"<<endl
             <<"\tC. Realizar una petición de reserva"<<endl
             <<"\tD. Acceder a su propio historial"<<endl
-            <<"\tE.\tSalir"<<endl <<endl;
+            <<"\tE. Salir"<<endl <<endl;
 
             cin>>opcion;
             switch (opcion) {
@@ -110,7 +142,11 @@ void Cliente::displayVehiculoCercano()
         list<Vehiculo>::iterator itCercano;
         for(list<Vehiculo>::iterator it = _plataforma->getVehiculos().begin(); it!= _plataforma->getVehiculos().end();it++)
         {
-            if( it->getDisponible() && distanciaAVehiculo(it->getLocalizacion())<l) itCercano = it;
+            if( it->getDisponible() && distanciaAVehiculo(it->getLocalizacion())<l)
+            {
+                itCercano = it;
+                l = distanciaAVehiculo(it->getLocalizacion());
+            }
         }
 
         if(l!=999999) cout << "El vehiculo más cercano a su posicion es " << itCercano->getMatricula() <<endl;

@@ -12,7 +12,9 @@ void Plataforma::iniciar()
     _administradores.push_back(admin);
     Cliente client("0001AAA",this);
     _clientes.push_back(client);
-    Vehiculo veh1("3233GHT",9,1);
+    Vehiculo veh1("3233GHT",9,0);
+    double loc[2] = {40.563,25.659};
+    veh1.setLocalizacion(loc);
     _vehiculos.push_back(veh1);
     Vehiculo veh2("3234GUI",5,1);
     _vehiculos.push_back(veh2);
@@ -55,10 +57,10 @@ void Plataforma::iniciar()
 
 
 
-    cout << "\tEl numero de usuarios en el sistema es " << _usuarios.size()       << endl
-         << "\tEl numero de clientes es: "              << _clientes.size()       << endl
+    cout << "\tEl numero de usuarios en el sistema es " << _usuarios.size()        << endl
+         << "\tEl numero de clientes es: "              << _clientes.size()        << endl
          << "\tEl numero de administradores es: "       << _administradores.size() <<endl
-         << "\tY el de Vehiculos es "                   <<_vehiculos.size()       << endl << endl;
+         << "\tY el de Vehiculos es "                   << _vehiculos.size()       << endl << endl;
 
 
 
@@ -86,6 +88,34 @@ list <Cliente>::iterator Plataforma::buscarCliente(string id)
 
     }
 }
+//bool Plataforma::validarMatricula(string matricula)
+//{
+
+//    if(matricula.length()!=7)
+//    {
+//        cout<<"Error de formato. Recuerda 0123ABC"<<endl;
+//        return 0;
+//    }
+//    for(int i=0;i<4;i++)
+//    {
+//        if(matricula[i]<'0'||matricula[i]>'9')
+//        {
+//            cout<<"Error. Recuerda los primeros 4 caracteres son numeros"<<endl;
+//            return 0;
+//        }
+//        for(int i=4;i<7;i++)
+//        {
+//            if(matricula[i]<'A'||matricula[i]>'Z')
+//            {
+//                cout<<"Error. Recuerda los ultimos 3 caracteres son letras mayusculas"<<endl;
+//                return 0;
+//            }
+//        }
+
+//        return 1;
+//    }
+//}
+
 
 list <Vehiculo>::iterator Plataforma::buscarVehiculo(string matricula)
 {
@@ -95,6 +125,7 @@ list <Vehiculo>::iterator Plataforma::buscarVehiculo(string matricula)
         if(it->getMatricula() == matricula) return it;
 
     }
+
 }
 
 
@@ -289,6 +320,14 @@ bool Plataforma::esCliente(string id)
     }
     return 0;
 }
+bool Plataforma::esVIP(string id)
+{
+    for(list <VIP>::iterator itC=_VIPs.begin();itC!=_VIPs.end();itC++)
+    {
+        if(itC->getID()==id) return 1;
+    }
+    return 0;
+}
 bool Plataforma::esAdministrador(string id)
 {
     for(list <Administrador>::iterator itA=_administradores.begin();itA!=_administradores.end();itA++)
@@ -304,7 +343,7 @@ bool Plataforma::esAdministrador(string id)
 bool Plataforma::existeUsuario(string id)
 {
 
-    if( !esCliente(id) && !esAdministrador(id)  )
+    if( !esCliente(id) && !esAdministrador(id) && !esVIP(id)  )
     {
         cout<<"No existe dicho usuario"<<endl;
         return 0;
@@ -317,7 +356,7 @@ bool Plataforma::esVehiculo(string matricula)
     {
         if(it->getMatricula()==matricula) return 1;
     }
-    cout<<"No existe dicho usuario"<<endl;
+    cout<<"No existe dicho vehiculo"<<endl;
     return 0;
 
 }
@@ -349,4 +388,32 @@ bool Plataforma::validacionId(string id)
     return 1;
 
 
+}
+
+bool Plataforma::validarMatricula(string matricula)
+{
+
+    if(matricula.length()!=7)
+    {
+        cout<<"Error de formato. Recuerda 0123ABC"<<endl;
+        return 0;
+    }
+    for(int i=0;i<4;i++)
+    {
+        if(matricula[i]<'0'||matricula[i]>'9')
+        {
+            cout<<"Error. Recuerda los primeros 4 caracteres son numeros"<<endl;
+            return 0;
+        }
+        for(int i=4;i<7;i++)
+        {
+            if(matricula[i]<'A'||matricula[i]>'Z')
+            {
+                cout<<"Error. Recuerda los ultimos 3 caracteres son letras mayusculas"<<endl;
+                return 0;
+            }
+        }
+
+        return 1;
+    }
 }

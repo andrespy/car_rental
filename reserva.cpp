@@ -3,10 +3,10 @@
 Reserva::Reserva()
 {
 
-    //_inicio = QDateTime();
+    _inicio = QDateTime();
     _matricula = "";
     _id ="";
-    //_fin = QDateTime();
+    _fin = QDateTime();
 
 }
 Reserva::Reserva(const string &id , QDateTime inicio , QDateTime fin , const string & matricula)

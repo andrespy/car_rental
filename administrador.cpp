@@ -30,11 +30,11 @@ void        Administrador::addVehiculo()        //correcto
     unsigned int capacidad;
     do{
         cout<<"\t Nuevo Vehiculo:"<<endl
-           <<"\tIntroduzca la matricula del coche "<<endl<<endl;
+           <<"\tIntroduzca la matricula del coche: ";
         cin>>matricula;
 
     }while(!_plataforma->validarMatricula(matricula));
-    cout <<"\tIntroduzca la capacidad del coche ";
+    cout <<"\tIntroduzca la capacidad del coche: ";
     cin>>capacidad;
     cout <<endl;
     Vehiculo veh1(matricula,int(capacidad),1);
@@ -92,8 +92,8 @@ void        Administrador::modVehiculo()
     string matricula;
     do
     {
-    cout<< "Introduzca la matricula del vehiculo que desea modificar: " ;
-    cin >> matricula;
+        cout<< "Introduzca la matricula del vehiculo que desea modificar: " ;
+        cin >> matricula;
     }
     while(!_plataforma->esVehiculo(matricula));
     list <Vehiculo>::iterator it = _plataforma->buscarVehiculo(matricula);
@@ -111,8 +111,8 @@ void        Administrador::modVehiculo()
     {
         do
         {
-        cout<<"Introduzca la nueva matricula: ";
-         cin>>matricula;
+            cout<<"Introduzca la nueva matricula: ";
+            cin>>matricula;
         }
         while(_plataforma->validarMatricula(matricula)&& _plataforma->esVehiculo(matricula));
         it->setMatricula(matricula); // hacer un set de la matricula
@@ -160,9 +160,8 @@ void Administrador::menu()
               <<"\tA.\tVehiculos"<<endl
              <<"\tB.\tUsuarios"<<endl
             <<"\tC.\tHistorico"<<endl
-            <<"\tD.\tRevisar Vehiculo"<<endl
-            <<"\tE.\tSalir"<<endl<<endl
-            <<"\tF.\tExiste usuario."<<endl;
+            <<"\tD.\tRevisar Vehiculos"<<endl
+            <<"\tE.\tSalir"<<endl<<"\t";
 
             cin>>opcion;
             //opcion='F';
@@ -185,10 +184,11 @@ void Administrador::menu()
             submenuHistorico();
             break;
         }
-            /*case 'D': case 'd':
-           {
-               return 'i';
-           }*/
+        case 'D': case 'd':
+        {
+            revisarVehiculos();
+            break;
+        }
         case 'F': case 'f':
         {
             cout<<"introduce ID"<< endl;
@@ -228,9 +228,9 @@ void Administrador::submenuUsuario()
     char opcion;
     do{
         cout/*<<"\t A.\tAniadir Usuario"<<endl
-                   <<"\t B.\tQuitar Usuario"<<endl
-                  <<"\t C.\tModificar Usuario"<<endl<<endl
-                */
+                                   <<"\t B.\tQuitar Usuario"<<endl
+                                  <<"\t C.\tModificar Usuario"<<endl<<endl
+                                */
                 <<"\t A.\tAniadir cliente"<<endl
                <<"\t B.\tQuitar cliente"<<endl
               <<"\t C.\tModificar cliente"<<endl<<endl
@@ -274,7 +274,15 @@ void Administrador::submenuHistorico()
 
 }
 
+void Administrador::revisarVehiculos()
+{
 
+    for(list <Vehiculo>::iterator it = _plataforma->getVehiculos().begin();it!=_plataforma->getVehiculos().end();it++)
+    {
+        if(it==_plataforma->getVehiculos().begin())  cout << "| Matricula\t|    Plazas\t|   Disponible\t|      Latitud\t|      Longitud"<<endl;
+        cout<< "| "<<it->getMatricula()<<"\t|\t"<<it->getCapacidad()<<"\t|\t"<<it->getDisponible()<<"\t|\t"<<it->getLocalizacion()[0]<<"\t|\t"<<it->getLocalizacion()[1]<<endl;
+    }
+}
 
 /*Reserva * Administrador::historico(const Vehiculo &vehiculo)
        {

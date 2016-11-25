@@ -56,9 +56,12 @@ public:
     void login();
 
     bool existeUsuario(string id);
+
     bool esCliente(string id);
     bool esAdministrador(string id);
+    bool esVIP(string id);
     bool esVehiculo(string matricula);
+
     bool validacionId(string id);
     bool validarMatricula(string matricula);
 

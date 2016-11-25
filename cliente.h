@@ -30,7 +30,6 @@ public:
     double distanciaAVehiculo(double * localizacion);
     ~Cliente(){}
 protected:
-    int _id;
     double _localizacion[2];
 };
 

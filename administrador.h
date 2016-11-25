@@ -55,6 +55,8 @@ public:
     void submenuHistorico();
 
 
+    void revisarVehiculos();
+
     //Reserva * historico(const Vehiculo & vehiculo);
     //Reserva * historico(const Usuario &user);
     // listar vehiculos por tiempo de uso
