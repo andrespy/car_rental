@@ -120,10 +120,10 @@ void        Administrador::modVehiculo()
     }
     case 'B': case 'b':
     {
-        int capacidad;
+        unsigned int capacidad; // unsigned para prevenir que se introduzca una capacidad negativa
         cout<<"Introduzca la nueva capacidad del vehiculo: ";
         cin >> capacidad;
-        //_plataforma->getVehiculos()->setCa //hacer un set de la capacidad
+        it->setCapacidad(int(capacidad)); //hacer un set de la capacidad
         break;
     }
     default:
@@ -228,9 +228,9 @@ void Administrador::submenuUsuario()
     char opcion;
     do{
         cout/*<<"\t A.\tAniadir Usuario"<<endl
-                                   <<"\t B.\tQuitar Usuario"<<endl
-                                  <<"\t C.\tModificar Usuario"<<endl<<endl
-                                */
+                                           <<"\t B.\tQuitar Usuario"<<endl
+                                          <<"\t C.\tModificar Usuario"<<endl<<endl
+                                        */
                 <<"\t A.\tAniadir cliente"<<endl
                <<"\t B.\tQuitar cliente"<<endl
               <<"\t C.\tModificar cliente"<<endl<<endl

@@ -15,7 +15,8 @@ class Administrador : public Usuario
 public:
 
 
-    Administrador();
+    Administrador():Usuario(){}
+    Administrador(Plataforma *plataforma):Usuario(plataforma){}
     Administrador(string id);
     Administrador(string id, Plataforma *plataforma):Usuario(id, plataforma){}
 

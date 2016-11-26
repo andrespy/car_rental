@@ -7,21 +7,21 @@
 void Plataforma::iniciar()
 {
     //  aqui habra que importar de una fuente externa los datos de otra sesion
-
-    Administrador admin("0000AAA",this);
+    pullDatabase();
+   /* Administrador admin("0000AAA",this);
     _administradores.push_back(admin);
     Cliente client("0001AAA",this);
-    _clientes.push_back(client);
+    _clientes.push_back(client);*/
     Vehiculo veh1("3233GHT",9,0);
     double loc[2] = {40.563,25.659};
     veh1.setLocalizacion(loc);
     _vehiculos.push_back(veh1);
     Vehiculo veh2("3234GUI",5,1);
     _vehiculos.push_back(veh2);
-    while(1)
-    {
-        login();
-    }
+
+
+    while(login()){}
+    pushDatabase();
 
     //_administradores.begin()->menu();
     //signIn();
@@ -72,12 +72,112 @@ void Plataforma::iniciar()
 
 Plataforma::Plataforma()
 {
-    /*_usuarios           = NULL;
-_clientes           = NULL;
-_administradores    = NULL;
-_vehiculos          = NULL;*/
+
+}
+void Plataforma::pushDatabase()
+{
+    ofstream administradores;
+    administradores.open("../database/administradores.bin", ios::out | ios::binary);
+    if(administradores.is_open())
+    {
+        for(list <Administrador>::iterator it = _administradores.begin();it!=_administradores.end();it++)
+        {
+            administradores << it->getID()<<endl;
+        }
+        administradores.close();
+    }
+
+    ofstream clientes;
+    clientes.open("../database/clientes.bin", ios::out | ios::binary);
+    if(clientes.is_open())
+    {
+        for(list <Cliente>::iterator it = _clientes.begin();it!=_clientes.end();it++)
+        {
+            clientes << it->getID()<<endl;
+        }
+        clientes.close();
+    }
+    /*ofstream vehiculos;
+    vehiculos.open("../database/vehiculos.bin", ios::out | ios::binary);
+    if(vehiculos.is_open())
+    {
+        for(list <Vehiculo>::iterator it = _vehiculos.begin();it!=_vehiculos.end();it++)
+        {
+            vehiculos << it->getMatricula()<<endl;
+            vehiculos << it->getCapacidad()<<endl;
+            vehiculos << it->getLocalizacion()[1]<<endl;
+            vehiculos << it->getLocalizacion()[0]<<endl;
+            vehiculos << it->getDisponible()<<endl;
+        }
+        vehiculos.close();
+    }*/
+
 }
 
+
+
+void Plataforma::pullDatabase()
+{
+    ifstream administradores;
+    administradores.open("../database/administradores.bin",ios::out |ios::binary);
+    if(!administradores) cerr << "Error al abrir ../database/administradores.bin"<<endl;
+    else {
+        Administrador admin(this);
+        string id;
+        do{
+            administradores >> id;
+            admin.setID(id);
+            _administradores.push_back(admin);
+        }
+        while(!administradores.eof());
+
+
+        administradores.close();
+    }
+
+    ifstream clientes;
+    clientes.open("../database/clientes.bin",ios::out |ios::binary);
+    if(!clientes) cerr << "Error al abrir ../database/clientes.bin"<<endl;
+    else {
+        Cliente client(this);
+        string id;
+        do{
+            clientes >> id;
+            client.setID(id);
+            _clientes.push_back(client);
+        }
+        while(!clientes.eof());
+        /* while(administradores.read((char *)(&admin), sizeof(Administrador) ));*/
+        //_administradores.push_back(admin);
+
+        clientes.close();
+    }
+
+    /*ifstream vehiculos;
+    vehiculos.open("../database/vehiculos.bin",ios::out |ios::binary);
+    if(!vehiculos) cerr << "Error al abrir ../database/vehiculos.bin"<<endl;
+    else {
+        Vehiculo veh;
+        string matricula;
+        double localizacion[2];
+        bool disponible;
+        int capacidad;
+        do{
+            vehiculos >> matricula >> capacidad >> localizacion[1] >> localizacion[0]>>disponible;
+            veh.setMatricula(matricula);
+            veh.setCapacidad(capacidad);
+            veh.setDisponible(disponible);
+            veh.setLocalizacion(localizacion);
+
+
+
+            _vehiculos.push_back(veh);
+        }
+        while(!vehiculos.eof());
+
+        vehiculos.close();
+    }*/
+}
 
 list <Cliente>::iterator Plataforma::buscarCliente(string id)
 {
@@ -292,7 +392,7 @@ list<Reserva>& Plataforma::getReservas()
     return *this;
 }*/
 
-void Plataforma::login()
+bool Plataforma::login()
 {
     string id;
 
@@ -305,11 +405,12 @@ void Plataforma::login()
            << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
         cin>>id;
-        if(id == "salir") exit(1);
+        if(id == "salir") return 0;
 
     }while(validacionId(id)==0 || existeUsuario(id)==0);
     if(esCliente(id)) buscarCliente(id)->menuCliente();
     else if(esAdministrador(id)) buscarAdministrador(id)->menu();
+    return 1;
 
 }
 bool Plataforma::esCliente(string id)

@@ -4,8 +4,14 @@
 #include "plataforma.h"
 Usuario::Usuario(Plataforma *plat)
 {
-    _id = "Anonimo";
+    _id = "";
     _plataforma = plat;
+
+}
+Usuario::Usuario()
+{
+    _id = "";
+    _plataforma = NULL;
 
 }
 

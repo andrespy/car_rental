@@ -1,6 +1,7 @@
 #ifndef PLATAFORMA_H
 #define PLATAFORMA_H
 #include <iostream>
+#include <fstream>
 #include <list>
 #include <algorithm>
 #include <string>
@@ -23,8 +24,8 @@ public:
     void menu();
 
 
-
-
+    void pullDatabase();
+    void pushDatabase();
 
     void setUsuario(const Usuario &usuario);
     void setVehiculo(const Vehiculo &vehiculo);
@@ -53,7 +54,7 @@ public:
 
 
     void iniciar();
-    void login();
+    bool login();
 
     bool existeUsuario(string id);
 

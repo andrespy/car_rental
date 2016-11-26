@@ -23,14 +23,16 @@ public:
     double * localizarVehiculos();
     Vehiculo vehiculoCercano();
     void reservar();
-    Reserva * historial();
+    void historial();
     void menuCliente();
     void displayVehiculoCercano();
     void displayCochesCercanos();
     double distanciaAVehiculo(double * localizacion);
+
     ~Cliente(){}
 protected:
     double _localizacion[2];
+
 };
 
 #endif // CLIENTE_H

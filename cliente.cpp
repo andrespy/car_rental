@@ -84,8 +84,17 @@ void Cliente::reservar()
 
 }
 
-Reserva * Cliente::historial()
+void Cliente::historial()
 {
+    cout << "Sus reservas hasta la fecha son: "<<endl;
+    for(list <Reserva>::iterator it =_plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+    {
+        if(it->getId()==_id)
+        {
+            cout << "\tEl dia " <<it->getInicio().date().day()<< " del " <<it->getInicio().date().month() <<"de"<<it->getInicio().date().year() <<" reservo el vehiculo con matricula "<< it->getMatricula()<<endl;
+        }
+    }
+
 
 }
 
