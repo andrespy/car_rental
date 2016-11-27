@@ -8,20 +8,6 @@
 //
 
 
-/*Administrador::Administrador()
-{
-    Usuario();
-}*/
-
-
-/*bool Administrador::existeVehiculo()
-{
-
-}
-*/
-
-
-
 
 
 void        Administrador::addVehiculo()        //correcto
@@ -42,18 +28,6 @@ void        Administrador::addVehiculo()        //correcto
 
 }
 
-/*void        Administrador::addUsuario()
-{
-    string id;
-    cout<<"\tNuevo Usuario:"<<endl
-       <<"\tIntroduzca un ID para el nuevo Usuario"<<endl;
-    cin  >> id;
-
-    Usuario usuario1( id ,  this->_plataforma );
-    this->_plataforma->append(usuario1);
-
-}*/
-
 void        Administrador::addAdministrador()
 {
     string id;
@@ -68,10 +42,6 @@ void        Administrador::addAdministrador()
     this->_plataforma->appendAdministrador(admin);
 
 }
-
-
-
-
 
 void        Administrador::addCliente()
 {
@@ -134,17 +104,56 @@ void        Administrador::modVehiculo()
 
 void        Administrador::modUsuario()
 {
+    string id;
+    do{
+        cout << "Introduzca el id del usuario que desea modificar: ";
+        cin >> id;
 
+    } while(!_plataforma->validacionId(id));
+    string idn;
+    do{
+        cout << "Introduzca el nuevo id: ";
+        cin>>idn;
+        if(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
+    }while(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn) ||  !_plataforma->validacionId(idn));
+
+    if(_plataforma->esAdministrador(id))
+    {_plataforma->buscarAdministrador(id)->setID(idn);
+        cout<< endl << id <<" ahora identifica como " << idn <<endl;
+    }
+    else if(_plataforma->esCliente(id))
+    {_plataforma->buscarCliente(id)->setID(idn);
+        cout<< endl << id <<" ahora identifica como " << idn <<endl;
+    }
+    else cout << "Id no disponible. " <<endl;
 }
 
 void        Administrador::rmVehiculo()
 {
+    string matricula;
+    do{
+
+        cout << "Introduzca la matrícula del vehiculo que desea eliminar: ";
+        cin >> matricula;
+    }
+    while(!_plataforma->validarMatricula(matricula) || !_plataforma->esVehiculo(matricula));
+    _plataforma->getVehiculos().erase(_plataforma->buscarVehiculo(matricula));
 
 }
 
 void        Administrador::rmUsuario()
 {
+    string id;
+    do{
 
+        cout << "Introduczca id del el usuario desea eliminar: ";
+        cin >> id;
+    }
+    while(!_plataforma->validacionId(id));
+
+    if(_plataforma->esAdministrador(id)) _plataforma->getAdministradores().erase(_plataforma->buscarAdministrador(id));
+    else if(_plataforma->esCliente(id)) _plataforma->getClientes().erase(_plataforma->buscarCliente(id));
+    else cout << "No existe un usuario con id " <<id<<endl;
 }
 
 
@@ -228,18 +237,15 @@ void Administrador::submenuUsuario()
     char opcion;
     do{
         cout/*<<"\t A.\tAniadir Usuario"<<endl
-                                           <<"\t B.\tQuitar Usuario"<<endl
-                                          <<"\t C.\tModificar Usuario"<<endl<<endl
-                                        */
+                                                           <<"\t B.\tQuitar Usuario"<<endl
+                                                          <<"\t C.\tModificar Usuario"<<endl<<endl
+                                                        */
                 <<"\t A.\tAniadir cliente"<<endl
-               <<"\t B.\tQuitar cliente"<<endl
-              <<"\t C.\tModificar cliente"<<endl<<endl
-
-             <<"\t D.\tAniadir administrador"<<endl
-            <<"\t E.\tQuitar administrador"<<endl
-           <<"\t F.\tModificar administrador"<<endl<<endl;
+               <<"\t B.\tAniadir administrador"<<endl
+              <<"\t C.\tQuitar usuario"<<endl
+             <<"\t D.\tModificar usuario"<<endl<<endl;
         cin>>opcion;
-    }while((opcion<'A'||opcion>'F')&&(opcion<'a'||opcion>'f'));
+    }while((opcion<'A'||opcion>'D')&&(opcion<'a'||opcion>'d'));
 
     switch(opcion)
     {
@@ -247,11 +253,10 @@ void Administrador::submenuUsuario()
     case 'B': case 'b': {     rmUsuario();           break;  }
     case 'C': case 'c': {     modUsuario();          break;  }*/
     case 'A': case 'a': {     addCliente();          break;  }
-    case 'B': case 'b': {   /*rmCliente();*/         break;  }
-    case 'C': case 'c': {     /*modCliente();*/      break;  }
-    case 'D': case 'd': {     addAdministrador();    break;  }
-    case 'E': case 'e': {   /*rmAdministrador();*/   break;  }
-    case 'F': case 'f': {   /*modAdministrador();*/  break;  }
+    case 'B': case 'b': {     addAdministrador();    break;  }
+    case 'C': case 'c': {     rmUsuario();           break;  }
+    case 'D': case 'd': {     modUsuario();          break;  }
+
     default: break;
     }
 }

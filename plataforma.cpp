@@ -7,11 +7,11 @@
 void Plataforma::iniciar()
 {
     //  aqui habra que importar de una fuente externa los datos de otra sesion
-    pullDatabase();
-   /* Administrador admin("0000AAA",this);
+    //pullDatabase();
+     Administrador admin("0000AAA",this);
     _administradores.push_back(admin);
     Cliente client("0001AAA",this);
-    _clientes.push_back(client);*/
+    _clientes.push_back(client);
     Vehiculo veh1("3233GHT",9,0);
     double loc[2] = {40.563,25.659};
     veh1.setLocalizacion(loc);
@@ -21,7 +21,7 @@ void Plataforma::iniciar()
 
 
     while(login()){}
-    pushDatabase();
+    //pushDatabase();
 
     //_administradores.begin()->menu();
     //signIn();
@@ -97,7 +97,7 @@ void Plataforma::pushDatabase()
         }
         clientes.close();
     }
-    /*ofstream vehiculos;
+    ofstream vehiculos;
     vehiculos.open("../database/vehiculos.bin", ios::out | ios::binary);
     if(vehiculos.is_open())
     {
@@ -105,12 +105,12 @@ void Plataforma::pushDatabase()
         {
             vehiculos << it->getMatricula()<<endl;
             vehiculos << it->getCapacidad()<<endl;
-            vehiculos << it->getLocalizacion()[1]<<endl;
-            vehiculos << it->getLocalizacion()[0]<<endl;
+            //vehiculos << it->getLocalizacion()[1]<<endl;
+            //vehiculos << it->getLocalizacion()[0]<<endl;
             vehiculos << it->getDisponible()<<endl;
         }
         vehiculos.close();
-    }*/
+    }
 
 }
 
@@ -119,7 +119,7 @@ void Plataforma::pushDatabase()
 void Plataforma::pullDatabase()
 {
     ifstream administradores;
-    administradores.open("../database/administradores.bin",ios::out |ios::binary);
+    administradores.open("../database/administradores.bin",ios::in |ios::binary);
     if(!administradores) cerr << "Error al abrir ../database/administradores.bin"<<endl;
     else {
         Administrador admin(this);
@@ -136,7 +136,7 @@ void Plataforma::pullDatabase()
     }
 
     ifstream clientes;
-    clientes.open("../database/clientes.bin",ios::out |ios::binary);
+    clientes.open("../database/clientes.bin",ios::in |ios::binary);
     if(!clientes) cerr << "Error al abrir ../database/clientes.bin"<<endl;
     else {
         Cliente client(this);
@@ -153,8 +153,8 @@ void Plataforma::pullDatabase()
         clientes.close();
     }
 
-    /*ifstream vehiculos;
-    vehiculos.open("../database/vehiculos.bin",ios::out |ios::binary);
+    char buffer[100];
+    ifstream vehiculos ("../database/vehiculos.bin",ios::in |ios::binary);
     if(!vehiculos) cerr << "Error al abrir ../database/vehiculos.bin"<<endl;
     else {
         Vehiculo veh;
@@ -163,7 +163,12 @@ void Plataforma::pullDatabase()
         bool disponible;
         int capacidad;
         do{
-            vehiculos >> matricula >> capacidad >> localizacion[1] >> localizacion[0]>>disponible;
+
+            vehiculos >> matricula ;
+            vehiculos >> capacidad ;
+            vehiculos>> localizacion[1] ;
+            vehiculos>> localizacion[0];
+            vehiculos>>disponible;
             veh.setMatricula(matricula);
             veh.setCapacidad(capacidad);
             veh.setDisponible(disponible);
@@ -176,7 +181,7 @@ void Plataforma::pullDatabase()
         while(!vehiculos.eof());
 
         vehiculos.close();
-    }*/
+    }
 }
 
 list <Cliente>::iterator Plataforma::buscarCliente(string id)
