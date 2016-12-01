@@ -66,6 +66,11 @@ public:
     bool validacionId(string id);
     bool validarMatricula(string matricula);
 
+
+
+
+
+
     ~Plataforma(){}
 
 private:

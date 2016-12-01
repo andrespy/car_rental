@@ -7,8 +7,8 @@
 void Plataforma::iniciar()
 {
     //  aqui habra que importar de una fuente externa los datos de otra sesion
-    //pullDatabase();
-     Administrador admin("0000AAA",this);
+    pullDatabase();
+    Administrador admin("0000AAA",this);
     _administradores.push_back(admin);
     Cliente client("0001AAA",this);
     _clientes.push_back(client);
@@ -18,13 +18,13 @@ void Plataforma::iniciar()
     _vehiculos.push_back(veh1);
     Vehiculo veh2("3234GUI",5,1);
     _vehiculos.push_back(veh2);
+    veh2.setMatricula("0000AAA");
 
 
     while(login()){}
-    //pushDatabase();
+    pushDatabase();
 
-    //_administradores.begin()->menu();
-    //signIn();
+
 
 
 
@@ -78,16 +78,36 @@ void Plataforma::pushDatabase()
 {
     ofstream administradores;
     administradores.open("../database/administradores.bin", ios::out | ios::binary);
+
     if(administradores.is_open())
     {
+        //administradores.write((char*)_administradores,sizeof(Administrador)*_administradores.size());
+
+        Administrador *adminlist = new Administrador[_administradores.size()];
+        int i=0;
         for(list <Administrador>::iterator it = _administradores.begin();it!=_administradores.end();it++)
         {
-            administradores << it->getID()<<endl;
+            adminlist[i] = *it;
+            i++;
         }
+
+        for(int i = 0 ; i<_administradores.size();i++)
+        {
+            administradores.write(((char*)&adminlist[i]),sizeof(Administrador));
+            cout<<"ESCRITO"<<adminlist->getID()<<endl;
+        }
+        delete [] adminlist;
+
+
+        /*for(list <Administrador>::iterator it = _administradores.begin();it!=_administradores.end();it++)
+        {
+
+            administradores << it->getID()<<endl;
+        }*/
         administradores.close();
     }
 
-    ofstream clientes;
+    /*ofstream clientes;
     clientes.open("../database/clientes.bin", ios::out | ios::binary);
     if(clientes.is_open())
     {
@@ -111,7 +131,7 @@ void Plataforma::pushDatabase()
         }
         vehiculos.close();
     }
-
+*/
 }
 
 
@@ -122,7 +142,17 @@ void Plataforma::pullDatabase()
     administradores.open("../database/administradores.bin",ios::in |ios::binary);
     if(!administradores) cerr << "Error al abrir ../database/administradores.bin"<<endl;
     else {
-        Administrador admin(this);
+
+        Administrador *admin/* = new Administrador[5]*/;
+
+
+            administradores.read(((char*)admin),sizeof(Administrador));
+            _administradores.push_back(*admin);
+
+
+
+        //delete [] adminlist;
+        /*Administrador admin(this);
         string id;
         do{
             administradores >> id;
@@ -130,7 +160,7 @@ void Plataforma::pullDatabase()
             _administradores.push_back(admin);
         }
         while(!administradores.eof());
-
+        */
 
         administradores.close();
     }
