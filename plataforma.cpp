@@ -7,7 +7,8 @@
 void Plataforma::iniciar()
 {
     //  aqui habra que importar de una fuente externa los datos de otra sesion
-    pullDatabase();
+   // pullDatabase();
+
     Administrador admin("0000AAA",this);
     _administradores.push_back(admin);
     Cliente client("0001AAA",this);
@@ -16,13 +17,19 @@ void Plataforma::iniciar()
     double loc[2] = {40.563,25.659};
     veh1.setLocalizacion(loc);
     _vehiculos.push_back(veh1);
+
+    Vehiculo veh5("0000AAA",9,1);
+    double loc2[2] = {12.563,25.659};
+    veh5.setLocalizacion(loc2);
+    _vehiculos.push_back(veh5);
+
     Vehiculo veh2("3234GUI",5,1);
     _vehiculos.push_back(veh2);
     veh2.setMatricula("0000AAA");
 
 
     while(login()){}
-    pushDatabase();
+    //pushDatabase();
 
 
 

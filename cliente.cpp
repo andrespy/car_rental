@@ -75,14 +75,14 @@ void Cliente::reservar()
     cin>> dias;
 
     QDateTime inicio = QDateTime::currentDateTime();
-    QDateTime fin/*(inicio.date().year(),inicio.date().month(),inicio.date().day()+int(dias))*/ = QDateTime::currentDateTime();;
-    fin.date().setDate(inicio.date().year(),inicio.date().month(),inicio.date().day()+6);
+    QDateTime fin= inicio.addDays(dias);
+
 
     Reserva reserva(_id,inicio,fin ,_plataforma->buscarVehiculo(matricula)->getMatricula());
     _plataforma->getReservas().push_back(reserva);
     _plataforma->buscarVehiculo(matricula)->setDisponible(0);
     cout<<"¡Enhorabuena! Ha reservado el vehiculo " <<reserva.getMatricula()
-         <<". Su reserva comprende hasta el día "<</*fin.date().dayOfWeek() <<" "<<*/fin.date().day()<<" de "<<fin.date().month()<< " de " << fin.date().year()<<endl;
+         <<". Su reserva comprende hasta el día "<<fin.date().day()<<" de "<<fin.date().month()<< " de " << fin.date().year()<< " a las "<< fin.time().hour()<<":"<<fin.time().minute()<<endl;
 
 
 }
