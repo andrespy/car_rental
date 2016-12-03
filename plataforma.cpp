@@ -29,7 +29,7 @@ void Plataforma::iniciar()
 
 
     while(login()){}
-    //pushDatabase();
+    pushDatabase();
 
 
 
@@ -88,31 +88,109 @@ void Plataforma::pushDatabase()
 
     if(administradores.is_open())
     {
-        //administradores.write((char*)_administradores,sizeof(Administrador)*_administradores.size());
+
 
         Administrador *adminlist = new Administrador[_administradores.size()];
         int i=0;
         for(list <Administrador>::iterator it = _administradores.begin();it!=_administradores.end();it++)
         {
             adminlist[i] = *it;
+            cout << adminlist[i].getID()<<endl;
             i++;
+
         }
 
-        for(int i = 0 ; i<_administradores.size();i++)
+        for(int x = 0 ; x<_administradores.size();x++)
         {
-            administradores.write(((char*)&adminlist[i]),sizeof(Administrador));
+            administradores.write(((char*)&adminlist[x]),sizeof(Administrador));
             cout<<"ESCRITO"<<adminlist->getID()<<endl;
         }
         delete [] adminlist;
-
-
-        /*for(list <Administrador>::iterator it = _administradores.begin();it!=_administradores.end();it++)
-        {
-
-            administradores << it->getID()<<endl;
-        }*/
         administradores.close();
     }
+
+//********************************************************************************************
+
+
+
+//                            PUSH CLIENTES
+
+
+
+//**********************************************************************************************
+
+
+    ofstream clientes;
+        clientes.open("../database/clientes.bin", ios::out | ios::binary);
+
+        if(clientes.is_open())
+        {
+
+
+            Cliente *clientlist = new Cliente[_clientes.size()];
+            int i=0;
+            for(list <Cliente>::iterator it = _clientes.begin();it!=_clientes.end();it++)
+            {
+                clientlist[i] = *it;
+                cout << clientlist[i].getID()<<endl;
+                i++;
+
+            }
+
+            for(int x = 0 ; x<_clientes.size();x++)
+            {
+                clientes.write(((char*)&clientlist[x]),sizeof(Cliente));
+                cout<<"ESCRITO"<<clientlist[x].getID()<<endl;
+            }
+            delete [] clientlist;
+            clientes.close();
+        }
+
+//************************************************************************************
+
+
+
+
+//                                  PUSH VEHICULOS
+
+
+
+
+
+//*************************************************************************************
+
+
+        ofstream vehiculos;
+            vehiculos.open("../database/vehiculos.bin", ios::out | ios::binary);
+
+            if(vehiculos.is_open())
+            {
+
+
+                Vehiculo *vehiclelist = new Vehiculo[_vehiculos.size()];
+                int i=0;
+                for(list <Vehiculo>::iterator it = _vehiculos.begin();it!=_vehiculos.end();it++)
+                {
+                    vehiclelist[i] = *it;
+                    cout << vehiclelist[i].getMatricula()<<endl;
+                    i++;
+
+                }
+
+                for(int x = 0 ; x<_vehiculos.size();x++)
+                {
+                    vehiculos.write(((char*)&vehiclelist[x]),sizeof(Vehiculo));
+                    cout<<"ESCRITO"<<vehiclelist[x].getMatricula()<<endl;
+                }
+                delete [] vehiclelist;
+                vehiculos.close();
+            }
+
+
+
+
+
+
 
     /*ofstream clientes;
     clientes.open("../database/clientes.bin", ios::out | ios::binary);
@@ -190,7 +268,7 @@ void Plataforma::pullDatabase()
         clientes.close();
     }
 
-    char buffer[100];
+
     ifstream vehiculos ("../database/vehiculos.bin",ios::in |ios::binary);
     if(!vehiculos) cerr << "Error al abrir ../database/vehiculos.bin"<<endl;
     else {
@@ -229,6 +307,7 @@ list <Cliente>::iterator Plataforma::buscarCliente(string id)
         if(it->getID() == id) return it;
 
     }
+
 }
 //bool Plataforma::validarMatricula(string matricula)
 //{
@@ -446,7 +525,8 @@ bool Plataforma::login()
         cout<<"Por favor introduzca su ID de usuario para acceder al sistema"<<endl
            << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
-        cin>>id;
+        //cin>>id;
+        id="salir";
         if(id == "salir") return 0;
 
     }while(validacionId(id)==0 || existeUsuario(id)==0);

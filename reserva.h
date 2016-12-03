@@ -10,7 +10,7 @@ class Reserva
 {
 public:
     Reserva();
-    Reserva(const string & id , QDateTime inicio , QDateTime fin , const string &matricula );
+    Reserva(const string & id , const QDateTime  & inicio , const QDateTime & fin , const string &matricula );
     QDateTime getInicio();
     void setInicio(QDateTime inicio);
     QDateTime getFin();

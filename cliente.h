@@ -14,6 +14,7 @@ class Reserva;
 class Cliente : public Usuario{
 public:
     Cliente(Plataforma *plataforma):Usuario(plataforma){}
+    Cliente():Usuario(){}
     Cliente(string id, Plataforma *plataforma):Usuario(id, plataforma){}
     //Cliente(string id, int numAbonado):Usuario(id){_numAbonado = numAbonado;}
 

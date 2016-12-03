@@ -1,13 +1,13 @@
 #include "vehiculo.h"
 #include "reserva.h"
-Vehiculo::Vehiculo(string matricula, double localizacion[2], const Reserva &reserva, int capacidad, QDateTime tiempoDeUso)
+Vehiculo::Vehiculo(string matricula, double localizacion[2], int capacidad, bool disponible)
 {
     _matricula = matricula;
     _localizacion[0] = localizacion[0];
     _localizacion[1] = localizacion[1];
-    *_reserva = reserva;
+
     _capacidad = capacidad;
-    _tiempoDeUso = tiempoDeUso;
+    _disponible = disponible;
 }
 
 Vehiculo::Vehiculo()
@@ -15,18 +15,15 @@ Vehiculo::Vehiculo()
     _matricula = "";
     _localizacion[0] = 0;
     _localizacion[1] = 0;
-    *_reserva = Reserva();
     _capacidad = 0;
-    _tiempoDeUso = QDateTime();
+    _disponible = 0;
 }
 Vehiculo::Vehiculo(string matricula, int capacidad, bool disponible)
 {
     _matricula = matricula;
     _localizacion[0] = 0;
     _localizacion[1] = 0;
-    Reserva *_reserva();
     _capacidad = capacidad;
-    _tiempoDeUso = QDateTime();
     _disponible = disponible;
 
 }
@@ -50,15 +47,8 @@ void Vehiculo::setLocalizacion(double localizacion[])
     _localizacion[1] = localizacion[1];
 }
 
-Reserva * Vehiculo::getReserva()
-{
-    return _reserva;
-}
 
-void Vehiculo::setReserva(const Reserva & reserva)
-{
-    *_reserva = reserva;
-}
+
 
 
 int Vehiculo::getCapacidad()
@@ -77,9 +67,8 @@ Vehiculo & Vehiculo::operator=( Vehiculo vehiculo)
     _matricula = vehiculo._matricula;
     _localizacion[1] = vehiculo._localizacion[1];
     _localizacion[0] = vehiculo._localizacion[0];
-    _reserva = vehiculo._reserva;
     _capacidad = vehiculo._capacidad;
-    _tiempoDeUso = vehiculo._tiempoDeUso;
+    _disponible = vehiculo._disponible;
     return *this;
 }
 void Vehiculo::setDisponible(bool disponible)

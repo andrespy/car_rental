@@ -17,46 +17,18 @@ void Cliente::setLocalizacion(double localizacion[])
     _localizacion[0] = localizacion[0];
 }
 
-double * Cliente::localizarVehiculos()
-{
 
-}
 
-Vehiculo Cliente::vehiculoCercano()
-{
-
-}
 
 
 void Cliente::reservar()
-{   /*unsigned int opcionvehiculo;
-
-    do{
-        cout << "Los 10 vehiculos disponibles más cercanos a usted son:"<<endl;
-        // VehiculosCercanosDisp(this->getLocalizacion,10);
-        cout << "Introduzca el numero del vehiculo que desea reservar: (Si desea cancelar la operacion escriba c)";
-        cin  >> opcionvehiculo;
-    }
-    while(opcionvehiculo>10 || opcionvehiculo<1 && opcionvehiculo != 'c');*/
-
-
-    //QDateTime fin(QDateTime.currentDateTime());
-    /*
-    cout<< "Introduce el tiempo de uso en dias:"<<endl;
-    unsigned int dias;
-
-    if(!(opcionvehiculo>10 || opcionvehiculo<1))
-    {   // VehiculoCercano(this->getLocalizacion,opcionvehiculo); http://stackoverflow.com/questions/9706517/sort-a-vector-of-objects-by-an-objects-attribute
-        //   Reserva reserva(this->getID(),QDateTime.currentDateTime(), fin,VehiculoCercano(this->getLocalizacion,opcionvehiculo)->getMatricula);
-        //this->_plataforma->getReservas().push_back(reserva);
-    }
-    */
+{
     string matricula;
     do
     {
         do
         {
-            cout << "Introduce la matrícula del coche que desea reservar: ";
+            cout << "Introduce la matrIcula del coche que desea reservar: ";
             cin >> matricula;
             cout<<endl;
             if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
@@ -68,14 +40,14 @@ void Cliente::reservar()
     }
     while(!_plataforma->buscarVehiculo(matricula)->getDisponible());
 
-    unsigned int dias;
+    int dias;
 
 
     cout << "Introduzca el numero de dias que desea que dure la reserva: ";
     cin>> dias;
 
     QDateTime inicio = QDateTime::currentDateTime();
-    QDateTime fin= inicio.addDays(int(dias));
+    QDateTime fin= inicio.addDays(dias);
 
 
     Reserva reserva(_id,inicio,fin ,_plataforma->buscarVehiculo(matricula)->getMatricula());
@@ -94,7 +66,7 @@ void Cliente::historial()
     {
         if(it->getId()==_id)
         {
-            cout << "\tEl dia " <<it->getInicio().date().day()<< " del " <<it->getInicio().date().month() <<"de"<<it->getInicio().date().year() <<" reservo el vehiculo con matricula "<< it->getMatricula()<<endl;
+            cout << "\tEl dia " <<it->getInicio().date().day()<< " del " <<it->getInicio().date().month() <<" de "<<it->getInicio().date().year() <<" reservo el vehiculo con matricula "<< it->getMatricula()<<endl;
         }
     }
 
@@ -117,21 +89,21 @@ void        Cliente::menuCliente()
 
             cin>>opcion;
             switch (opcion) {
-            case 'A':
+            case 'A':case 'a':
             {
-                //this->plataforma.displayVehiculos();
+                //_plataforma.displayVehiculos();
                 break;
-            case 'B':
+            case 'B':case 'b':
                 {
                     displayVehiculoCercano();
                     break;
                 }
-                case 'C':
+                case 'C':case 'c':
                 {
                     reservar();
                     break;
                 }
-                case 'D':
+                case 'D':case'd':
                 {
                     historial();
                     break;
@@ -143,10 +115,10 @@ void        Cliente::menuCliente()
 
 
 
-        }while(opcion<'A'||opcion>'E');
+        }while((opcion<'A'||opcion>'E') && (opcion<'a'||opcion>'e'));
     }
 
-    while(opcion!='E');
+    while(opcion!='E'&&opcion!='e');
 
 
 }
