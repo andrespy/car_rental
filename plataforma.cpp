@@ -9,28 +9,9 @@ void Plataforma::iniciar()
 
     pullDatabase();
 
-    /*Vehiculo veh1("3233GHT",9,0);
-    double loc[2] = {40.563,25.659};
-    veh1.setLocalizacion(loc);
-    _vehiculos.push_back(veh1);
-
-    Vehiculo veh5("0000AAA",9,1);
-    double loc2[2] = {12.563,25.659};
-    veh5.setLocalizacion(loc2);
-    _vehiculos.push_back(veh5);
-
-    Vehiculo veh2("3234GUI",5,1);
-    _vehiculos.push_back(veh2);
-    veh2.setMatricula("0000AAA");
-    */
-
     while(login()){}
+
     pushDatabase();
-
-
-
-
-
 
     list <Vehiculo>::iterator itV;
     for(itV=_vehiculos.begin();itV!=_vehiculos.end();itV++)
@@ -212,7 +193,6 @@ void Plataforma::pullDatabase()
         while(administradores>>id)
         {
             admin.setID(id);
-            cout<<id<<endl;
             _administradores.push_back(admin);
         }
         administradores.close();
@@ -232,7 +212,6 @@ void Plataforma::pullDatabase()
         {
             client.setID(id);
             client.setLocalizacion(loc);
-            cout<<id<<loc[0]<<loc[1]<<endl;
             _clientes.push_back(client);
         }
         clientes.close();
@@ -285,22 +264,7 @@ void Plataforma::pullDatabase()
             reserva.setId(id);
             reserva.setMatricula(matricula);
             _reservas.push_back(reserva);
-            list<Reserva>::iterator it = _reservas.begin();
-            cout <<  it->getId()
-                  <<' '<<  it->getMatricula()
-                 <<' '<<it->getInicio().date().year()
-                <<' '<<it->getInicio().date().month()
-               <<' '<<it->getInicio().date().day()
-              <<' '<<it->getInicio().time().hour()
-             <<' '<<it->getInicio().time().minute()
-            <<' '<<it->getInicio().time().second()
-            <<' '<<it->getFin().date().year()
-            <<' '<<it->getFin().date().month()
-            <<' '<<it->getFin().date().day()
-            <<' '<<it->getFin().time().hour()
-            <<' '<<it->getFin().time().minute()
-            <<' '<<it->getFin().time().second()
-            <<endl;
+
 
 
         }

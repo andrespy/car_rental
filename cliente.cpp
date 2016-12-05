@@ -40,7 +40,7 @@ void Cliente::reservar()
     }
     while(!_plataforma->buscarVehiculo(matricula)->getDisponible());
 
-    int dias;
+    /*int dias;
 
 
     cout << "Introduzca el numero de dias que desea que dure la reserva: ";
@@ -48,13 +48,19 @@ void Cliente::reservar()
 
     QDateTime inicio = QDateTime::currentDateTime();
     QDateTime fin= inicio.addDays(dias);
+    */
 
-
-    Reserva reserva(_id,inicio,fin ,_plataforma->buscarVehiculo(matricula)->getMatricula());
+    Reserva reserva(_id,_plataforma->buscarVehiculo(matricula)->getMatricula());
+    reserva.pideFecha();
     _plataforma->getReservas().push_back(reserva);
-    //_plataforma->buscarVehiculo(matricula)->setDisponible(0);
+    _plataforma->buscarVehiculo(matricula)->setDisponible(0);
     cout<<"¡Enhorabuena! Ha reservado el vehiculo " <<reserva.getMatricula()
-       <<". Su reserva comprende hasta el día "<<fin.date().day()<<" de "<<fin.date().month()<< " de " << fin.date().year()<< " a las "<< fin.time().hour()<<":"<<fin.time().minute()<<endl;
+       <<". Su reserva comprende hasta el día "
+      <<reserva.getFin().date().day()
+     <<" de "<<reserva.getFin().date().month()<< " de "
+    << reserva.getFin().date().year()<< " a las "
+    << reserva.getFin().time().hour()<<":"
+    <<reserva.getFin().time().minute()<<endl;
 
 
 }
