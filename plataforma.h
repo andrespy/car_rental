@@ -34,13 +34,13 @@ public:
 
 
     void append(Vehiculo vehiculo);
-    void append(Usuario usuario);
-    void appendAdministrador(Administrador usuario);
+
+    void appendAdministrador(Administrador admin);
     void appendCliente(Cliente usuario);
 
 
 
-    list<Usuario>&          getUsuarios();
+
     list<Administrador>&    getAdministradores();
     list<Cliente>&          getClientes();
     list<VIP>&              getVIP();
@@ -75,7 +75,7 @@ public:
 
 private:
 
-    list <Usuario>       _usuarios;
+
     list <Cliente>       _clientes;
     list <Administrador> _administradores;
     list <Vehiculo>      _vehiculos;

@@ -15,7 +15,8 @@ public:
     void setInicio(QDateTime inicio);
     QDateTime getFin();
     void setFin(QDateTime fin);
-
+    void setId(string id);
+    void setMatricula(string matricula);
 
     string getId(){return _id;}
     string getMatricula(){return _matricula;}

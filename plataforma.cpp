@@ -38,12 +38,7 @@ void Plataforma::iniciar()
         cout <<"\tVehiculo " << itV->getMatricula() << " con capacidad para "<< itV->getCapacidad()<< " personas."<<endl;
     }
     cout<<endl;
-    list <Usuario>::iterator itU;
-    for(itU=_usuarios.begin();itU!=_usuarios.end();itU++)
-    {
-        cout <<"\tUsuario " << itU->getID() << endl;
 
-    }
     list <Cliente>::iterator itC;
     for(itC=_clientes.begin();itC!=_clientes.end();itC++)
     {
@@ -59,8 +54,7 @@ void Plataforma::iniciar()
 
 
 
-    cout << "\tEl numero de usuarios en el sistema es " << _usuarios.size()        << endl
-         << "\tEl numero de clientes es: "              << _clientes.size()        << endl
+    cout << "\tEl numero de clientes es: "              << _clientes.size()        << endl
          << "\tEl numero de administradores es: "       << _administradores.size() <<endl
          << "\tY el de Vehiculos es "                   << _vehiculos.size()       << endl << endl;
 
@@ -168,9 +162,41 @@ void Plataforma::pushDatabase()
         vehiculos.close();
     }
 
+    //  *****************************************************************************
 
 
+    //              PUSH RESERVAS
 
+    // ***************************************************************************
+
+    ofstream reservas;
+
+    reservas.open("../database/reservas.dat", ios::trunc);
+
+    if(reservas.is_open())
+    {
+        for(list <Reserva>::iterator it = _reservas.begin();it!=_reservas.end();it++)
+        {
+            reservas  <<  it->getId()
+                       <<' '<<  it->getMatricula()
+                      <<' '<<it->getInicio().date().year()
+                     <<' '<<it->getInicio().date().month()
+                    <<' '<<it->getInicio().date().day()
+                   <<' '<<it->getInicio().time().hour()
+                  <<' '<<it->getInicio().time().minute()
+                 <<' '<<it->getInicio().time().second()
+                <<' '<<it->getFin().date().year()
+               <<' '<<it->getFin().date().month()
+              <<' '<<it->getFin().date().day()
+             <<' '<<it->getFin().time().hour()
+            <<' '<<it->getFin().time().minute()
+            <<' '<<it->getFin().time().second()
+            <<endl;
+
+        }
+
+        vehiculos.close();
+    }
 }
 
 
@@ -213,7 +239,6 @@ void Plataforma::pullDatabase()
     }
     else cerr <<"No se pudo abrir ../database/clientes.dat"<<endl;
 
-    //vehiculos  <<  it->getMatricula()<<' '<<  it->getCapacidad()<<' '<<it->getLocalizacion()[0]<<' '<<it->getLocalizacion()[1] <<endl;
 
     ifstream vehiculos;
     vehiculos.open("../database/vehiculos.dat",ios::in |ios::binary);
@@ -238,53 +263,53 @@ void Plataforma::pullDatabase()
 
 
 
-    /*ifstream clientes;
-    clientes.open("../database/clientes.bin",ios::in |ios::binary);
-    if(!clientes) cerr << "Error al abrir ../database/clientes.bin"<<endl;
-    else {
-        Cliente client(this);
-        string id;
-        do{
-            clientes >> id;
-            client.setID(id);
-            _clientes.push_back(client);
-        }
-        while(!clientes.eof());
-        /* while(administradores.read((char *)(&admin), sizeof(Administrador) ));*/
-    //_administradores.push_back(admin);
 
-    /* clientes.close();
+
+    ifstream reservas;
+    reservas.open("../database/reservas.dat",ios::in |ios::binary);
+    QDateTime inicio;
+    QDateTime fin;
+    string matricula;
+    Reserva reserva;
+    int inic[6];
+    int final[6];
+    if(reservas.is_open())
+    {
+        while(reservas>>id>>matricula>>inic[5]>>inic[4]>>inic[3]>>inic[2]>>inic[1]>>inic[0]>>final[5]
+              >>final[4]>>final[3]>>final[2]>>final[1]>>final[0])
+        {
+            inicio = QDateTime(QDate(inic[5],inic[4],inic[3]),QTime(inic[2],inic[1],inic[0]));
+            fin = QDateTime(QDate(final[5],final[4],final[3]),QTime(final[2],final[1],final[0]));
+            reserva.setFin(fin);
+            reserva.setInicio(inicio);
+            reserva.setId(id);
+            reserva.setMatricula(matricula);
+            _reservas.push_back(reserva);
+            list<Reserva>::iterator it = _reservas.begin();
+            cout <<  it->getId()
+                  <<' '<<  it->getMatricula()
+                 <<' '<<it->getInicio().date().year()
+                <<' '<<it->getInicio().date().month()
+               <<' '<<it->getInicio().date().day()
+              <<' '<<it->getInicio().time().hour()
+             <<' '<<it->getInicio().time().minute()
+            <<' '<<it->getInicio().time().second()
+            <<' '<<it->getFin().date().year()
+            <<' '<<it->getFin().date().month()
+            <<' '<<it->getFin().date().day()
+            <<' '<<it->getFin().time().hour()
+            <<' '<<it->getFin().time().minute()
+            <<' '<<it->getFin().time().second()
+            <<endl;
+
+
+        }
+        reservas.close();
     }
-
-
-    ifstream vehiculos ("../database/vehiculos.bin",ios::in |ios::binary);
-    if(!vehiculos) cerr << "Error al abrir ../database/vehiculos.bin"<<endl;
-    else {
-        Vehiculo veh;
-        string matricula;
-        double localizacion[2];
-        bool disponible;
-        int capacidad;
-        do{
-
-            vehiculos >> matricula ;
-            vehiculos >> capacidad ;
-            vehiculos>> localizacion[1] ;
-            vehiculos>> localizacion[0];
-            vehiculos>>disponible;
-            veh.setMatricula(matricula);
-            veh.setCapacidad(capacidad);
-            veh.setDisponible(disponible);
-            veh.setLocalizacion(localizacion);
+    else cerr <<"No se pudo abrir ../database/reservas.dat"<<endl;
 
 
 
-            _vehiculos.push_back(veh);
-        }
-        while(!vehiculos.eof());
-
-        vehiculos.close();
-    }*/
 }
 
 
@@ -306,33 +331,6 @@ list <Cliente>::iterator Plataforma::buscarCliente(string id)
     }
 
 }
-//bool Plataforma::validarMatricula(string matricula)
-//{
-
-//    if(matricula.length()!=7)
-//    {
-//        cout<<"Error de formato. Recuerda 0123ABC"<<endl;
-//        return 0;
-//    }
-//    for(int i=0;i<4;i++)
-//    {
-//        if(matricula[i]<'0'||matricula[i]>'9')
-//        {
-//            cout<<"Error. Recuerda los primeros 4 caracteres son numeros"<<endl;
-//            return 0;
-//        }
-//        for(int i=4;i<7;i++)
-//        {
-//            if(matricula[i]<'A'||matricula[i]>'Z')
-//            {
-//                cout<<"Error. Recuerda los ultimos 3 caracteres son letras mayusculas"<<endl;
-//                return 0;
-//            }
-//        }
-
-//        return 1;
-//    }
-//}
 
 
 list <Vehiculo>::iterator Plataforma::buscarVehiculo(string matricula)
@@ -349,9 +347,6 @@ list <Vehiculo>::iterator Plataforma::buscarVehiculo(string matricula)
 
 
 
-
-
-
 list <Administrador>::iterator Plataforma::buscarAdministrador(string id)
 {
 
@@ -362,19 +357,6 @@ list <Administrador>::iterator Plataforma::buscarAdministrador(string id)
     }
 }
 
-/*for(list <Cliente>::iterator itC=_clientes.begin();itC!=_clientes.end();itC++)
-{
-    if(itC->getID()==id) return itC;
-
-}
-list <Administrador>::iterator itA;
-for(itA=_administradores.begin();itA!=_administradores.end();itA++)
-{
-    if(itA->getID()==id) return itA;
-
-}
-
-}*/
 
 
 
@@ -382,45 +364,6 @@ void Plataforma::append(Vehiculo vehiculo)
 {
     _vehiculos.push_back(vehiculo);
 
-
-    /* if(_vehiculos!=NULL)
-    {
-
-
-        Vehiculo *tmpVehiculos = new Vehiculo[_numVehiculos];
-
-        for(  int i = 0 ; i  < _numVehiculos ; i++)
-        {
-            tmpVehiculos[i] = _vehiculos[i];
-        }
-
-        delete [] _vehiculos;
-
-        _vehiculos = new Vehiculo[_numVehiculos+1];
-
-        for(  int i = 0 ; i  < _numVehiculos ; i++)
-        {
-            *(_vehiculos+i) = *(tmpVehiculos+i);
-        }
-
-        delete [] tmpVehiculos;
-
-        _numVehiculos++;
-
-        *(_vehiculos+_numVehiculos)=vehiculo;
-    }
-
-    else
-    {
-        _numVehiculos++;
-        _vehiculos= new Vehiculo[_numVehiculos];
-        _vehiculos = &vehiculo;
-
-    }
-    //deletear vehiculos en array antiguo
-    // aumentar tamaño de vehiculos en uno
-    //
-*/
 }
 
 
@@ -429,52 +372,14 @@ void Plataforma::append(Vehiculo vehiculo)
 void Plataforma::appendCliente(Cliente usuario)
 {
     _clientes.push_back(usuario);
-
-    /* if(_usuarios!=NULL)
-    {
-
-        Usuario *tmpUsuarios = new Usuario[_numUsuarios];
-
-        for(  int i = 0 ; i  < _numUsuarios ; i++)
-        {
-            *(tmpUsuarios+i) = _usuarios[i];
-        }
-
-        delete [] _usuarios;
-
-        _usuarios = new Usuario[_numUsuarios+1];
-
-        for(  int i = 0 ; i  < _numUsuarios ; i++)
-        {
-            _usuarios[i] = tmpUsuarios[i];
-        }
-
-        delete [] tmpUsuarios;
-
-        _numUsuarios++;
-
-        *(_usuarios+_numUsuarios) = usuario;
-    }
-
-    else
-    {
-        _numUsuarios++;
-        _usuarios= new Usuario[_numUsuarios];
-        *_usuarios = usuario;
-
-    }
-*/
 }
 
-void Plataforma::appendAdministrador(Administrador usuario)
+void Plataforma::appendAdministrador(Administrador admin)
 {
-    _administradores.push_back(usuario);
+    _administradores.push_back(admin);
 }
 
-list <Usuario>& Plataforma::getUsuarios()
-{
-    return _usuarios;
-}
+
 
 list <Vehiculo>&   Plataforma::getVehiculos()
 {
@@ -500,23 +405,11 @@ list<Reserva>& Plataforma::getReservas()
     return _reservas;
 }
 
-/*Plataforma & Plataforma::operator=(Plataforma plataforma)
-{
-    _usuarios        = plataforma._usuarios;
-    _vehiculos       = plataforma._vehiculos;
-    _numVehiculos   = plataforma._numVehiculos;
-    _numUsuarios    = plataforma._numUsuarios;
 
-    return *this;
-}*/
 
 bool Plataforma::login()
 {
     string id;
-
-
-
-
 
     do{
         cout<<"Por favor introduzca su ID de usuario para acceder al sistema"<<endl

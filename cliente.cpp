@@ -52,7 +52,7 @@ void Cliente::reservar()
 
     Reserva reserva(_id,inicio,fin ,_plataforma->buscarVehiculo(matricula)->getMatricula());
     _plataforma->getReservas().push_back(reserva);
-    _plataforma->buscarVehiculo(matricula)->setDisponible(0);
+    //_plataforma->buscarVehiculo(matricula)->setDisponible(0);
     cout<<"¡Enhorabuena! Ha reservado el vehiculo " <<reserva.getMatricula()
        <<". Su reserva comprende hasta el día "<<fin.date().day()<<" de "<<fin.date().month()<< " de " << fin.date().year()<< " a las "<< fin.time().hour()<<":"<<fin.time().minute()<<endl;
 

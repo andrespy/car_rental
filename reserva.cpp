@@ -9,6 +9,15 @@ Reserva::Reserva()
     _fin = QDateTime();
 
 }
+void Reserva::setId(string id)
+{
+    _id = id;
+}
+void Reserva::setMatricula(string matricula)
+{
+    _matricula = matricula;
+}
+
 Reserva::Reserva(const string &id , const QDateTime & inicio , const QDateTime & fin , const string & matricula)
 {
 
