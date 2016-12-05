@@ -6,14 +6,10 @@
 
 void Plataforma::iniciar()
 {
-    //  aqui habra que importar de una fuente externa los datos de otra sesion
-   // pullDatabase();
 
-    Administrador admin("0000AAA",this);
-    _administradores.push_back(admin);
-    Cliente client("0001AAA",this);
-    _clientes.push_back(client);
-    Vehiculo veh1("3233GHT",9,0);
+    pullDatabase();
+
+    /*Vehiculo veh1("3233GHT",9,0);
     double loc[2] = {40.563,25.659};
     veh1.setLocalizacion(loc);
     _vehiculos.push_back(veh1);
@@ -26,11 +22,10 @@ void Plataforma::iniciar()
     Vehiculo veh2("3234GUI",5,1);
     _vehiculos.push_back(veh2);
     veh2.setMatricula("0000AAA");
-
+    */
 
     while(login()){}
     pushDatabase();
-
 
 
 
@@ -77,146 +72,105 @@ void Plataforma::iniciar()
 
 
 
-Plataforma::Plataforma()
-{
 
-}
 void Plataforma::pushDatabase()
 {
+
+
+
+
+
+    //******************************************************************
+
+
+
+    //                      PUSH ADMINISTRADORES
+
+
+
+    //******************************************************************
     ofstream administradores;
-    administradores.open("../database/administradores.bin", ios::out | ios::binary);
+
+    administradores.open("../database/administradores.dat", ios::trunc);
 
     if(administradores.is_open())
     {
-
-
-        Administrador *adminlist = new Administrador[_administradores.size()];
-        int i=0;
         for(list <Administrador>::iterator it = _administradores.begin();it!=_administradores.end();it++)
         {
-            adminlist[i] = *it;
-            cout << adminlist[i].getID()<<endl;
-            i++;
+            administradores  <<  it->getID() <<endl;
 
         }
 
-        for(int x = 0 ; x<_administradores.size();x++)
-        {
-            administradores.write(((char*)&adminlist[x]),sizeof(Administrador));
-            cout<<"ESCRITO"<<adminlist->getID()<<endl;
-        }
-        delete [] adminlist;
         administradores.close();
     }
 
-//********************************************************************************************
+    //********************************************************************************************
 
 
 
-//                            PUSH CLIENTES
+    //                            PUSH CLIENTES
 
 
 
-//**********************************************************************************************
-
-
+    //**********************************************************************************************
     ofstream clientes;
-        clientes.open("../database/clientes.bin", ios::out | ios::binary);
 
-        if(clientes.is_open())
-        {
+    clientes.open("../database/clientes.dat", ios::trunc /*| ios::binary*/);
 
-
-            Cliente *clientlist = new Cliente[_clientes.size()];
-            int i=0;
-            for(list <Cliente>::iterator it = _clientes.begin();it!=_clientes.end();it++)
-            {
-                clientlist[i] = *it;
-                cout << clientlist[i].getID()<<endl;
-                i++;
-
-            }
-
-            for(int x = 0 ; x<_clientes.size();x++)
-            {
-                clientes.write(((char*)&clientlist[x]),sizeof(Cliente));
-                cout<<"ESCRITO"<<clientlist[x].getID()<<endl;
-            }
-            delete [] clientlist;
-            clientes.close();
-        }
-
-//************************************************************************************
-
-
-
-
-//                                  PUSH VEHICULOS
-
-
-
-
-
-//*************************************************************************************
-
-
-        ofstream vehiculos;
-            vehiculos.open("../database/vehiculos.bin", ios::out | ios::binary);
-
-            if(vehiculos.is_open())
-            {
-
-
-                Vehiculo *vehiclelist = new Vehiculo[_vehiculos.size()];
-                int i=0;
-                for(list <Vehiculo>::iterator it = _vehiculos.begin();it!=_vehiculos.end();it++)
-                {
-                    vehiclelist[i] = *it;
-                    cout << vehiclelist[i].getMatricula()<<endl;
-                    i++;
-
-                }
-
-                for(int x = 0 ; x<_vehiculos.size();x++)
-                {
-                    vehiculos.write(((char*)&vehiclelist[x]),sizeof(Vehiculo));
-                    cout<<"ESCRITO"<<vehiclelist[x].getMatricula()<<endl;
-                }
-                delete [] vehiclelist;
-                vehiculos.close();
-            }
-
-
-
-
-
-
-
-    /*ofstream clientes;
-    clientes.open("../database/clientes.bin", ios::out | ios::binary);
     if(clientes.is_open())
     {
         for(list <Cliente>::iterator it = _clientes.begin();it!=_clientes.end();it++)
         {
-            clientes << it->getID()<<endl;
+            clientes  <<  it->getID()<<' '<<it->getLocalizacion()[0]<<' '<<it->getLocalizacion()[1] <<endl;
+
         }
+
         clientes.close();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //************************************************************************************
+
+
+
+
+    //                                  PUSH VEHICULOS
+
+
+
+
+
+    //*************************************************************************************
     ofstream vehiculos;
-    vehiculos.open("../database/vehiculos.bin", ios::out | ios::binary);
+
+    vehiculos.open("../database/vehiculos.dat", ios::trunc);
+
     if(vehiculos.is_open())
     {
         for(list <Vehiculo>::iterator it = _vehiculos.begin();it!=_vehiculos.end();it++)
         {
-            vehiculos << it->getMatricula()<<endl;
-            vehiculos << it->getCapacidad()<<endl;
-            //vehiculos << it->getLocalizacion()[1]<<endl;
-            //vehiculos << it->getLocalizacion()[0]<<endl;
-            vehiculos << it->getDisponible()<<endl;
+            vehiculos  <<  it->getMatricula()<<' '<<  it->getCapacidad()<<' '<<it->getLocalizacion()[0]<<' '<<it->getLocalizacion()[1]<<' '<<it->getDisponible() <<endl;
+
         }
+
         vehiculos.close();
     }
-*/
+
+
+
+
 }
 
 
@@ -224,33 +178,67 @@ void Plataforma::pushDatabase()
 void Plataforma::pullDatabase()
 {
     ifstream administradores;
-    administradores.open("../database/administradores.bin",ios::in |ios::binary);
-    if(!administradores) cerr << "Error al abrir ../database/administradores.bin"<<endl;
-    else {
-
-        Administrador *admin/* = new Administrador[5]*/;
-
-
-            administradores.read(((char*)admin),sizeof(Administrador));
-            _administradores.push_back(*admin);
-
-
-
-        //delete [] adminlist;
-        /*Administrador admin(this);
-        string id;
-        do{
-            administradores >> id;
+    administradores.open("../database/administradores.dat",ios::in |ios::binary);
+    Administrador admin(this);
+    string id;
+    if(administradores.is_open())
+    {
+        while(administradores>>id)
+        {
             admin.setID(id);
+            cout<<id<<endl;
             _administradores.push_back(admin);
         }
-        while(!administradores.eof());
-        */
-
         administradores.close();
     }
+    else cerr <<"No se pudo abrir ../database/administradores.dat"<<endl;
+
+
 
     ifstream clientes;
+    clientes.open("../database/clientes.dat",ios::in |ios::binary);
+    Cliente client(this);
+
+    double loc[2];
+    if(clientes.is_open())
+    {
+        while(clientes>>id>>loc[0]>>loc[1])
+        {
+            client.setID(id);
+            client.setLocalizacion(loc);
+            cout<<id<<loc[0]<<loc[1]<<endl;
+            _clientes.push_back(client);
+        }
+        clientes.close();
+    }
+    else cerr <<"No se pudo abrir ../database/clientes.dat"<<endl;
+
+    //vehiculos  <<  it->getMatricula()<<' '<<  it->getCapacidad()<<' '<<it->getLocalizacion()[0]<<' '<<it->getLocalizacion()[1] <<endl;
+
+    ifstream vehiculos;
+    vehiculos.open("../database/vehiculos.dat",ios::in |ios::binary);
+    Vehiculo veh;
+    int capacidad;
+    bool disponible;
+
+    if(vehiculos.is_open())
+    {
+        while(vehiculos>>id>>capacidad>>loc[0]>>loc[1]>>disponible)
+        {
+            veh.setMatricula(id);
+            veh.setLocalizacion(loc);
+            veh.setCapacidad(capacidad);
+            veh.setDisponible(disponible);
+            _vehiculos.push_back(veh);
+        }
+        vehiculos.close();
+    }
+    else cerr <<"No se pudo abrir ../database/vehiculos.dat"<<endl;
+
+
+
+
+    /*ifstream clientes;
     clientes.open("../database/clientes.bin",ios::in |ios::binary);
     if(!clientes) cerr << "Error al abrir ../database/clientes.bin"<<endl;
     else {
@@ -263,9 +251,9 @@ void Plataforma::pullDatabase()
         }
         while(!clientes.eof());
         /* while(administradores.read((char *)(&admin), sizeof(Administrador) ));*/
-        //_administradores.push_back(admin);
+    //_administradores.push_back(admin);
 
-        clientes.close();
+    /* clientes.close();
     }
 
 
@@ -296,8 +284,17 @@ void Plataforma::pullDatabase()
         while(!vehiculos.eof());
 
         vehiculos.close();
-    }
+    }*/
 }
+
+
+Plataforma::Plataforma()
+{
+
+}
+
+
+
 
 list <Cliente>::iterator Plataforma::buscarCliente(string id)
 {
@@ -525,8 +522,8 @@ bool Plataforma::login()
         cout<<"Por favor introduzca su ID de usuario para acceder al sistema"<<endl
            << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
-        //cin>>id;
-        id="salir";
+        cin>>id;
+        //id="salir";
         if(id == "salir") return 0;
 
     }while(validacionId(id)==0 || existeUsuario(id)==0);

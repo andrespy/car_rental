@@ -91,7 +91,7 @@ void        Cliente::menuCliente()
             switch (opcion) {
             case 'A':case 'a':
             {
-                //_plataforma.displayVehiculos();
+                displayVehiculosDisponibles();
                 break;
             case 'B':case 'b':
                 {
@@ -122,6 +122,29 @@ void        Cliente::menuCliente()
 
 
 }
+
+void Cliente::displayVehiculosDisponibles()
+{
+    bool i=1;
+    for(list<Vehiculo>::iterator it = _plataforma->getVehiculos().begin(); it!= _plataforma->getVehiculos().end();it++)
+    {
+        if(i){
+            cout<<"___________________________________________________________________"<<endl
+               <<"| Matricula\t|\tLongitud\t|\tLatitud\t|"<<endl;
+            i=0;
+        }
+        if( it->getDisponible())
+        {
+            cout<<"| "<<it->getMatricula()<<"\t|\t"<<it->getLocalizacion()[1]<<"\t|\t"<<it->getLocalizacion()[0]<<"\t|"<<endl;
+        }
+    }
+
+}
+
+
+
+
+
 
 void Cliente::displayVehiculoCercano()
 {
