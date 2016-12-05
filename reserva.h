@@ -16,6 +16,8 @@ public:
     QDateTime getFin();
     void setFin(QDateTime fin);
 
+    float precioReserva(QDateTime inicio, QDateTime fin);
+    void pideFecha();
 
     string getId(){return _id;}
     string getMatricula(){return _matricula;}
