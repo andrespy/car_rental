@@ -30,13 +30,9 @@ public:
     void setUsuario(const Usuario &usuario);
     void setVehiculo(const Vehiculo &vehiculo);
 
-    //list::iterator buscarUsuario(string id);
 
 
-    void append(Vehiculo vehiculo);
 
-    void appendAdministrador(Administrador admin);
-    void appendCliente(Cliente usuario);
 
 
 
@@ -48,13 +44,14 @@ public:
     list<Reserva>&          getReservas();
 
 
-    list <Cliente>::iterator buscarCliente(string id);
-    list <Administrador>::iterator buscarAdministrador(string id);
-    list <Vehiculo>::iterator buscarVehiculo(string matricula);
-
+    list <Cliente>::iterator                buscarCliente(string id);
+    list <Administrador>::iterator          buscarAdministrador(string id);
+    list <Vehiculo>::iterator               buscarVehiculo(string matricula);
+    list <VIP>::iterator                    buscarVIP(string id);
 
     void iniciar();
     bool login();
+    void actualizarReservas();
 
     bool existeUsuario(string id);
 
@@ -81,8 +78,7 @@ private:
     list <Vehiculo>      _vehiculos;
     list <VIP>           _VIPs;
     list <Reserva>       _reservas;
-    //Usuario             *_users;
-    //Vehiculo            *_vehicles;
+
 };
 
 #endif // PLATAFORMA_H
