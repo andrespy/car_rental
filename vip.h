@@ -11,7 +11,9 @@
 class VIP : public Cliente
 {
 public:
-    VIP(Plataforma *_plataforma);
+    VIP(Plataforma *plataforma);
+    VIP(string id, Plataforma *plataforma);
+    VIP(string id,Plataforma *plataforma,double loc[]);
     void reservar();
     ~VIP(){}
 };
