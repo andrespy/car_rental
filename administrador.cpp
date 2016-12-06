@@ -10,7 +10,7 @@
 
 
 
-void        Administrador::addVehiculo()        //correcto
+void        Administrador::addVehiculo()
 {
     string matricula;
     unsigned int capacidad;
@@ -24,7 +24,7 @@ void        Administrador::addVehiculo()        //correcto
     cin>>capacidad;
     cout <<endl;
     Vehiculo veh1(matricula,int(capacidad),1);
-    this->_plataforma->append(veh1);
+    _plataforma->getVehiculos().push_back(veh1);
     
 }
 
@@ -39,7 +39,7 @@ void        Administrador::addAdministrador()
     }
     while(!_plataforma->validacionId(id));
     Administrador admin( id ,  this->_plataforma );
-    this->_plataforma->appendAdministrador(admin);
+    _plataforma->getAdministradores().push_back(admin);
     
 }
 
@@ -52,9 +52,22 @@ void        Administrador::addCliente()
         cin  >> id;
     }
     while(_plataforma->validacionId(id)!=1);
-    Cliente client1( id ,  this->_plataforma );
-    this->_plataforma->appendCliente(client1);
+    Cliente client1( id , _plataforma );
+    _plataforma->getClientes().push_back(client1);
     
+}
+void        Administrador::addVIP()
+{
+    string id;
+    do{
+        cout<<"\tNuevo VIP:"<<endl
+           <<"\tIntroduzca un ID para el nuevo VIP"<<endl;
+        cin  >> id;
+    }
+    while(_plataforma->validacionId(id)!=1);
+    VIP VIP1( id ,  _plataforma );
+    _plataforma->getVIP().push_back(VIP1);
+
 }
 
 void        Administrador::modVehiculo()
@@ -114,7 +127,7 @@ void        Administrador::modUsuario()
     do{
         cout << "Introduzca el nuevo id: ";
         cin>>idn;
-        if(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
+        if(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn) || _plataforma->esVIP(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
     }while(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn) ||  !_plataforma->validacionId(idn));
     
     if(_plataforma->esAdministrador(id))
@@ -123,6 +136,10 @@ void        Administrador::modUsuario()
     }
     else if(_plataforma->esCliente(id))
     {_plataforma->buscarCliente(id)->setID(idn);
+        cout<< endl << id <<" ahora identifica como " << idn <<endl;
+    }
+    else if(_plataforma->esVIP(id))
+    {_plataforma->buscarVIP(id)->setID(idn);
         cout<< endl << id <<" ahora identifica como " << idn <<endl;
     }
     else cout << "Id no disponible. " <<endl;
@@ -166,8 +183,8 @@ void Administrador::menu()
             
             cout<<"\tBienvenido "<< getID()<< ", has entrado como administrador"<<endl<<endl
                <<"\tElige una opcion:"<<endl<<endl
-              <<"\tA.\tVehiculos"<<endl
-             <<"\tB.\tUsuarios"<<endl
+              <<"\tA.\tAdministrar vehiculos"<<endl
+             <<"\tB.\tAdministrar usuarios"<<endl
             <<"\tC.\tHistorico"<<endl
             <<"\tD.\tRevisar Vehiculos"<<endl
             <<"\tE.\tSalir"<<endl<<"\t";
@@ -203,7 +220,6 @@ void Administrador::menu()
             cout<<"introduce ID"<< endl;
             string id;
             cin >> id;
-            //id="Anonmo";
             if(_plataforma->existeUsuario(id)==1) cout << "existe"<<endl;
             else cout << "No existe"<<endl;
             break;
@@ -219,9 +235,10 @@ void Administrador::submenuVehiculo()
     do{
         cout<<"\tA.\tAdd Vehiculo"<<endl
            <<"\tB.\tQuitar Vehiculo"<<endl
-          <<"\tC.\tModificar Vehiculo"<<endl<<endl;
+          <<"\tC.\tModificar Vehiculo"<<endl
+         <<"\tD.\tVolver"<<endl<<endl;
         cin>>opcion;
-    }while(opcion!='A'&&opcion!='B'&&opcion!='C'&&opcion!='a'&&opcion!='b'&&opcion!='c');
+    }while((opcion<'A'||opcion>'D')&&(opcion<'a'||opcion>'d'));
     switch(opcion)
     {
     case 'A': case 'a': {     addVehiculo();      break;  }
@@ -237,18 +254,21 @@ void Administrador::submenuUsuario()
     char opcion;
     do{
         cout<<"\t A.\tAniadir cliente"<<endl
-           <<"\t B.\tAniadir administrador"<<endl
-          <<"\t C.\tQuitar usuario"<<endl
-         <<"\t D.\tModificar usuario"<<endl<<endl;
+           <<"\t B.\tAniadir VIP"<<endl
+          <<"\t C.\tAniadir administrador"<<endl
+         <<"\t D.\tQuitar usuario"<<endl
+        <<"\t E.\tModificar usuario"<<endl
+        <<"\tF.\tVolver"<<endl<<endl;
         cin>>opcion;
-    }while((opcion<'A'||opcion>'D')&&(opcion<'a'||opcion>'d'));
+    }while((opcion<'A'||opcion>'F')&&(opcion<'a'||opcion>'f'));
     
     switch(opcion)
     {
     case 'A': case 'a': {     addCliente();          break;  }
-    case 'B': case 'b': {     addAdministrador();    break;  }
-    case 'C': case 'c': {     rmUsuario();           break;  }
-    case 'D': case 'd': {     modUsuario();          break;  }
+    case 'B': case 'b': {     addVIP();              break;  }
+    case 'C': case 'c': {     addAdministrador();    break;  }
+    case 'D': case 'd': {     rmUsuario();           break;  }
+    case 'E': case 'e': {     modUsuario();          break;  }
         
     default: break;
     }
@@ -282,13 +302,4 @@ void Administrador::revisarVehiculos()
     }
 }
 
-/*Reserva * Administrador::historico(const Vehiculo &vehiculo)
-       {
-       
-       }
-       
-       Reserva * Administrador::historico(const Usuario &user)
-       {
-       
-       }
-       */
+

@@ -2,6 +2,7 @@
 #define ADMINISTRADOR_H
 #include "usuario.h"
 #include "cliente.h"
+#include "vip.h"
 //#include <algorithm>
 //
 //
@@ -33,6 +34,7 @@ public:
     void addUsuario();
     void addCliente();
     void addAdministrador();
+    void addVIP();
 
     //          MODIFY
 
@@ -58,9 +60,7 @@ public:
 
     void revisarVehiculos();
 
-    //Reserva * historico(const Vehiculo & vehiculo);
-    //Reserva * historico(const Usuario &user);
-    // listar vehiculos por tiempo de uso
+
 
 
     ~Administrador(){}
