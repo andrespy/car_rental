@@ -15,7 +15,8 @@ class Cliente : public Usuario{
 public:
     Cliente(Plataforma *plataforma):Usuario(plataforma){}
     Cliente():Usuario(){}
-    Cliente(string id, Plataforma *plataforma):Usuario(id, plataforma){}
+    Cliente(string id, Plataforma *plataforma, double localizacion[]);
+    Cliente(string id, Plataforma *plataforma):Usuario(id,plataforma){}
     //Cliente(string id, int numAbonado):Usuario(id){_numAbonado = numAbonado;}
 
 
@@ -29,7 +30,7 @@ public:
     void displayVehiculoCercano();
     void displayCochesCercanos();
     double distanciaAVehiculo(double * localizacion);
-
+    bool colisionReserva(Reserva reserva);
     ~Cliente(){}
 protected:
     double _localizacion[2];

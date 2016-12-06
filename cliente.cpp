@@ -10,6 +10,12 @@ double * Cliente::getLocalizacion()
 {
     return _localizacion;
 }
+Cliente::Cliente(string id, Plataforma *plataforma, double localizacion[]): Usuario(id,plataforma)
+{
+
+    _localizacion[1] = localizacion[1];
+    _localizacion[0] = localizacion[0];
+}
 
 void Cliente::setLocalizacion(double localizacion[])
 {
@@ -17,7 +23,21 @@ void Cliente::setLocalizacion(double localizacion[])
     _localizacion[0] = localizacion[0];
 }
 
+bool Cliente::colisionReserva( Reserva  reserva)
+{
+    for(list <Reserva>::iterator it = _plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+    {
+        if(it->getMatricula()==reserva.getMatricula() && it->getId()==reserva.getId() &&
+                !(it->getFin()>reserva.getFin() && it->getFin()>reserva.getFin()||
+                  it->getFin()<reserva.getFin() &&  it->getFin()<reserva.getFin()))
+        {
+            cout <<"Error de colision entre reservas"<<endl;
+            return 1;
 
+        }
+    }
+    return 0;
+}
 
 
 
@@ -39,35 +59,24 @@ void Cliente::reservar()
         while(!_plataforma->esVehiculo(matricula));
     }
     while(!_plataforma->buscarVehiculo(matricula)->getDisponible());
-
-    /*int dias;
-
-
-    cout << "Introduzca el numero de dias que desea que dure la reserva: ";
-    cin>> dias;
-
-    QDateTime inicio = QDateTime::currentDateTime();
-    QDateTime fin= inicio.addDays(dias);
-    */
-
     Reserva reserva(_id,_plataforma->buscarVehiculo(matricula)->getMatricula());
-    reserva.pideFecha();
+
+    do{
+
+        reserva.pideFecha();
+    }while (colisionReserva(reserva));
     _plataforma->getReservas().push_back(reserva);
-    _plataforma->buscarVehiculo(matricula)->setDisponible(0);
-    cout<<"¡Enhorabuena! Ha reservado el vehiculo " <<reserva.getMatricula()
-       <<". Su reserva comprende hasta el día "
-      <<reserva.getFin().date().day()
-     <<" de "<<reserva.getFin().date().month()<< " de "
-    << reserva.getFin().date().year()<< " a las "
-    << reserva.getFin().time().hour()<<":"
-    <<reserva.getFin().time().minute()<<endl;
+    _plataforma->actualizarReservas();
+    cout<<"¡Enhorabuena! Ha reservado el vehiculo "
+       <<reserva.getMatricula()
+      <<endl;
 
 
 }
 
 void Cliente::historial()
 {
-    cout << "Sus reservas hasta la fecha son: "<<endl;
+    cout << "Sus reservas hasta la fecha son: "<<endl<<endl;
     for(list <Reserva>::iterator it =_plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
     {
         if(it->getId()==_id)
