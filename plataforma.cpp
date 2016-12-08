@@ -470,6 +470,7 @@ void Plataforma::actualizarReservas()
     for(list <Reserva>::iterator it = _reservas.begin();it!=_reservas.end();it++)
     {
         if(it->getFin()<QDateTime::currentDateTime()||it->getInicio()>QDateTime::currentDateTime())   buscarVehiculo(it->getMatricula())->setDisponible(1);
+        else buscarVehiculo(it->getMatricula())->setDisponible(0);
     }
 }
 

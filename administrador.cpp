@@ -18,8 +18,9 @@ void        Administrador::addVehiculo()
         cout<<"\t Nuevo Vehiculo:"<<endl
            <<"\tIntroduzca la matricula del coche: ";
         cin>>matricula;
+        if(_plataforma->esVehiculo(matricula)) cout <<"Dicho vehiculo ya existe en nuestro sistema"<<endl;
         
-    }while(!_plataforma->validarMatricula(matricula));
+    }while(!_plataforma->validarMatricula(matricula)||_plataforma->esVehiculo(matricula));
     cout <<"\tIntroduzca la capacidad del coche: ";
     cin>>capacidad;
     cout <<endl;
