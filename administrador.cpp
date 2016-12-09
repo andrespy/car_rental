@@ -286,8 +286,8 @@ void Administrador::submenuHistorico()
     
     switch(opcion)
     {
-    case 'A': case 'a': {     /*historicoVehiculo();*/      break;  }
-    case 'B': case 'b': {     /*historicoUsuario(); */      break;  }
+    case 'A': case 'a': {     historicoVehiculo();      break;  }
+    case 'B': case 'b': {     historicoUsuario();       break;  }
     default: break;
     }
     
@@ -303,4 +303,57 @@ void Administrador::revisarVehiculos()
     }
 }
 
+void Administrador::historicoVehiculo()
+{
+    string matricula;
+    do{
+        cout << "Introduce la matrícula del vehículo: (teclee volver para volver al menu)"<<endl;
+        cin >> matricula;
+    }while (matricula!="volver" && !_plataforma->esVehiculo(matricula) );
+    if(matricula!="volver")
+    {
+        for(list <Reserva>::iterator it =_plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+        {
+            if(matricula == it->getMatricula())
+            {
+                cout<<"Matricula: "<<it->getMatricula()<<endl
+                   <<"Usuario: "<<it->getId()<<endl
+                  <<"Inicio: "<< it->getInicio().date().day()<<"/"
+                 <<it->getInicio().date().month()<<"/"<<it->getInicio().date().year()
+                << " a las " <<it->getInicio().time().hour()<<":"<<it->getInicio().time().minute()<<endl
+                <<"Fin: "<< it->getFin().date().day()<<"/"
+               <<it->getFin().date().month()<<"/"<<it->getFin().date().year()
+              << " a las " <<it->getFin().time().hour()<<":"<<it->getFin().time().minute()<<endl<<endl<<endl;
+            }
+        }
+    }
+}
+
+
+void Administrador::historicoUsuario()
+{
+    string id;
+    do{
+        cout << "Introduce el id del usuario: (teclee volver para volver al menu)"<<endl;
+        cin >> id;
+        cout <<endl;
+    }while (id!="volver" && !_plataforma->existeUsuario(id) );
+    if(id!="volver")
+    {
+        for(list <Reserva>::iterator it =_plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+        {
+            if(id == it->getId())
+            {
+                cout<<"Usuario: "<<it->getId()<<endl
+                   <<"Matricula: "<<it->getMatricula()<<endl
+                  <<"Inicio: "<< it->getInicio().date().day()<<"/"
+                 <<it->getInicio().date().month()<<"/"<<it->getInicio().date().year()
+                << " a las " <<it->getInicio().time().hour()<<":"<<it->getInicio().time().minute()<<endl
+                <<"Fin: "<< it->getFin().date().day()<<"/"
+               <<it->getFin().date().month()<<"/"<<it->getFin().date().year()
+              << " a las " <<it->getFin().time().hour()<<":"<<it->getFin().time().minute()<<endl<<endl<<endl;
+            }
+        }
+    }
+}
 

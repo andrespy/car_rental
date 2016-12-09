@@ -568,7 +568,7 @@ bool Plataforma::existeUsuario(string id)
 
     if( !esCliente(id) && !esAdministrador(id) && !esVIP(id)  )
     {
-        cout<<"No existe dicho usuario"<<endl;
+        //cout<<"No existe dicho usuario"<<endl;
         return 0;
     }
     return 1;
@@ -579,7 +579,7 @@ bool Plataforma::esVehiculo(string matricula)
     {
         if(it->getMatricula()==matricula) return 1;
     }
-    cout<<"No existe dicho vehiculo"<<endl;
+    //cout<<"No existe dicho vehiculo"<<endl;
     return 0;
 
 }

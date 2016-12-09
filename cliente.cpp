@@ -76,15 +76,16 @@ void Cliente::reservar()
 
 void Cliente::historial()
 {
-    cout << "Sus reservas hasta la fecha son: "<<endl<<endl;
+    bool sinreservas =1;
+
     for(list <Reserva>::iterator it =_plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
     {
         if(it->getId()==_id)
-        {
+        {   if(sinreservas){cout << "Sus reservas hasta la fecha son: "<<endl<<endl;sinreservas = 0;}
             cout << "\tEl dia " <<it->getInicio().date().day()<< " del " <<it->getInicio().date().month() <<" de "<<it->getInicio().date().year() <<" reservo el vehiculo con matricula "<< it->getMatricula()<<endl;
         }
     }
-
+    if(sinreservas) cout << endl << "No nos consta que haya reservado ningún vehiculo hasta la fecha"<<endl<<endl;
 
 }
 
@@ -143,15 +144,16 @@ void Cliente::displayVehiculosDisponibles()
     bool i=1;
     for(list<Vehiculo>::iterator it = _plataforma->getVehiculos().begin(); it!= _plataforma->getVehiculos().end();it++)
     {
-        if(i){
-            cout<<"___________________________________________________________________"<<endl
-               <<"| Matricula\t|\tLongitud\t|\tLatitud\t|"<<endl;
-            i=0;
-        }
-        if( it->getDisponible())
+
+
+        if(it==_plataforma->getVehiculos().begin())  cout << "| Matricula\t| Latitud\t| Longitud"<<endl;
+        if( it->getDisponible())cout<< "| "<<it->getMatricula()<<"\t| "<<it->getLocalizacion()[0]<<"\t| "<<it->getLocalizacion()[1]<<endl;
+
+
+        /*if( it->getDisponible())
         {
             cout<<"| "<<it->getMatricula()<<"\t|\t"<<it->getLocalizacion()[1]<<"\t|\t"<<it->getLocalizacion()[0]<<"\t|"<<endl;
-        }
+        }*/
     }
 
 }
@@ -176,7 +178,8 @@ void Cliente::displayVehiculoCercano()
             }
         }
 
-        if(l!=999999) cout << "El vehiculo más cercano a su posicion es " << itCercano->getMatricula() <<endl;
+        if(l!=999999) cout << "El vehiculo más cercano a su posicion es " << itCercano->getMatricula()<<
+                           " a "<< distanciaAVehiculo(itCercano->getLocalizacion())*111.319<<"KM"<<endl;
         else cout << "No disponemos de vehiculos libres"<< endl;
     }
     else cout << "No disponemos de vehiculos libres"<< endl;

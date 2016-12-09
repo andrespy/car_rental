@@ -75,7 +75,7 @@ Reserva::~Reserva()
 float Reserva::precioReserva(QDateTime inicio, QDateTime fin)
 {
     int segundos = inicio.secsTo(fin);
-    float prize = segundos * 0.19/60;
+    float prize = float(segundos) * 0.19/60;
     return prize;
 }
 
@@ -110,29 +110,29 @@ void Reserva::pideFecha()
     }while(opcion!='s' && opcion!='S' && opcion!='n' && opcion!='N');
 
 
-    int fecha[5];
+    int fecha1[5];
     do{
         cout<<"Escriba el ano en el que FINALIZAR la reserva."<<endl;
-        cin>>fecha[0];
+        cin>>fecha1[0];
         cout<<"Escriba el mes, (1-12) en el que FINALIZAR la reserva."<<endl;
-        cin>>fecha[1];
+        cin>>fecha1[1];
         cout<<"Escriba el dia, (1-30/31) en el que FINALIZAR la reserva."<<endl;
-        cin>>fecha[2];
+        cin>>fecha1[2];
         cout<<"Escriba la hora, (0-23) en el que FINALIZAR la reserva."<<endl;
-        cin>>fecha[3];
+        cin>>fecha1[3];
         cout<<"Escriba el minuto, (0-59) en el que FINALIZAR la reserva."<<endl;
-        cin>>fecha[4];
+        cin>>fecha1[4];
 
-        final=  QDateTime(QDate(fecha[0],fecha[1],fecha[2]),QTime(fecha[3],fecha[4],0,0));
+        final=  QDateTime(QDate(fecha1[0],fecha1[1],fecha1[2]),QTime(fecha1[3],fecha1[4],0,0));
     }while(!final.isValid() || final<inicio);
 
     if(opcion=='N'||opcion=='n') _inicio = inicio;
     _fin = final;
 
-    QString iTime = _inicio.toString("HH:mm:ss 'of' dddd dd 'of' MMMM 'of' yyyy");
-    cout<<"Hora inicio -->  "<<iTime.toStdString()<<endl<<endl;
-    QString fTime = final.toString("HH:mm:ss 'of' dddd dd 'of' MMMM 'of' yyyy");
-    cout<<"Hora fin -->  "<<fTime.toStdString()<<endl<<endl;
-    cout<<"El coste de la operacion asciende a "<< precioReserva(inicio, final)<<" Euros"<<endl<<endl;
+    QString iTime = _inicio.toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy");
+    cout<<"Inicio:\t"<<iTime.toStdString()<<endl<<endl;
+    QString fTime = final.toString("HH:mm 'of' dddd dd 'of' MMMM 'of' yyyy");
+    cout<<"Fin:\t"<<fTime.toStdString()<<endl<<endl;
+    cout<<"El coste de la operacion asciende a "<< precioReserva(_inicio, _fin)<<" Euros"<<endl<<endl;
 
 }

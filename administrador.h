@@ -57,9 +57,11 @@ public:
     void submenuUsuario();
     void submenuHistorico();
 
+    //      HISTORIALES
 
     void revisarVehiculos();
-
+    void historicoVehiculo();
+    void historicoUsuario();
 
 
 
