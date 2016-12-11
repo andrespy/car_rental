@@ -21,13 +21,17 @@ Usuario::Usuario(string id , Plataforma *plat)
     _plataforma= plat;
 
 }
+Usuario::Usuario(const Usuario &usuario)
+{
+    _id = usuario._id;
+    _plataforma = usuario._plataforma;
+}
 
 
-
-/*Plataforma * Usuario::getPlataforma()
+Plataforma * Usuario::getPlataforma()
 {
     return _plataforma;
-}*/
+}
 
 Usuario & Usuario::operator=(Usuario usr)
 {

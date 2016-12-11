@@ -27,7 +27,14 @@ Vehiculo::Vehiculo(string matricula, int capacidad, bool disponible)
     _disponible = disponible;
 
 }
-
+Vehiculo::Vehiculo(const Vehiculo &vehiculo)
+{
+    _matricula = vehiculo._matricula;
+    _capacidad = vehiculo._capacidad;
+    _disponible = vehiculo._disponible;
+    _localizacion[0]= vehiculo._localizacion[0];
+    _localizacion[1]= vehiculo._localizacion[1];
+}
 
 string Vehiculo::getMatricula()
 {

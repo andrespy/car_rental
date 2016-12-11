@@ -52,6 +52,7 @@ public:
     void iniciar();
     bool login();
     void actualizarReservas();
+    bool reservaActiva(string matricula);
 
     bool existeUsuario(string id);
 

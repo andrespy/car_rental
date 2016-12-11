@@ -131,7 +131,7 @@ void Reserva::pideFecha()
 
     QString iTime = _inicio.toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy");
     cout<<"Inicio:\t"<<iTime.toStdString()<<endl<<endl;
-    QString fTime = final.toString("HH:mm 'of' dddd dd 'of' MMMM 'of' yyyy");
+    QString fTime = final.toString("HH:mm 'de' dddd dd 'of' MMMM 'of' yyyy");
     cout<<"Fin:\t"<<fTime.toStdString()<<endl<<endl;
     cout<<"El coste de la operacion asciende a "<< precioReserva(_inicio, _fin)<<" Euros"<<endl<<endl;
 

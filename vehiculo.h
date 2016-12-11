@@ -11,6 +11,7 @@ public:
     Vehiculo();
     Vehiculo(string matricula, int capacidad, bool disponible);
     Vehiculo(string matricula, double localizacion[], int capacidad, bool disponible);
+    Vehiculo(const Vehiculo &vehiculo);
     string getMatricula();
     void setMatricula(string matricula);
     double * getLocalizacion(); // preguntar devolver puntero

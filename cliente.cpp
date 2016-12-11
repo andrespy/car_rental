@@ -27,11 +27,15 @@ bool Cliente::colisionReserva( Reserva  reserva)
 {
     for(list <Reserva>::iterator it = _plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
     {
-        if(it->getMatricula()==reserva.getMatricula() && it->getId()==reserva.getId() &&
-                !(it->getFin()>reserva.getFin() && it->getFin()>reserva.getFin()||
-                  it->getFin()<reserva.getFin() &&  it->getFin()<reserva.getFin()))
+        if(it->getMatricula()==reserva.getMatricula() &&
+
+                ((reserva.getInicio()<it->getInicio() && reserva.getFin()>reserva.getInicio())||
+                 (reserva.getInicio()<it->getFin()&&reserva.getFin()>it->getFin())||
+                 (reserva.getInicio()<it->getInicio()&&reserva.getFin()>it->getFin())||
+                 (reserva.getInicio()>it->getInicio()&&reserva.getFin()<it->getFin())))
+
         {
-            cout <<"Error de colision entre reservas"<<endl;
+            cout <<endl<<"Error de colision entre reservas"<<endl;
             return 1;
 
         }
@@ -44,21 +48,19 @@ bool Cliente::colisionReserva( Reserva  reserva)
 void Cliente::reservar()
 {
     string matricula;
+
     do
     {
-        do
-        {
-            cout << "Introduce la matrIcula del coche que desea reservar: ";
-            cin >> matricula;
-            cout<<endl;
-            if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
-            else if(!_plataforma->buscarVehiculo(matricula)->getDisponible())
-                cout<<"Dicho vehiculo no esta disponible en estos momentos."<<endl;
+        cout << "Introduce la matrIcula del coche que desea reservar: ";
+        cin >> matricula;
+        cout<<endl;
+        if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
+        /*else if(!_plataforma->buscarVehiculo(matricula)->getDisponible())
+                cout<<"Dicho vehiculo no esta disponible en estos momentos."<<endl;*/
 
-        }
-        while(!_plataforma->esVehiculo(matricula));
     }
-    while(!_plataforma->buscarVehiculo(matricula)->getDisponible());
+    while(!_plataforma->esVehiculo(matricula));
+
     Reserva reserva(_id,_plataforma->buscarVehiculo(matricula)->getMatricula());
 
     do{
@@ -73,6 +75,29 @@ void Cliente::reservar()
 
 
 }
+void Cliente::dondeAparque()
+{
+    bool sinreservas =1;
+    char opcion = 'o';
+    for(list <Reserva>::iterator it = _plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+    {
+        if(it->getId()==_id && it->getFin()>QDateTime::currentDateTime()&&it->getInicio()<QDateTime::currentDateTime())
+        {
+            sinreservas =0;
+            cout<<endl<<"Su vehiculo con matricula: "<<it->getMatricula()<<" se encuentra localizado en "
+               <<_plataforma->buscarVehiculo(it->getMatricula())->getLocalizacion()[1]<< " "<<
+                 _plataforma->buscarVehiculo(it->getMatricula())->getLocalizacion()[0]<<endl;
+        }
+    }
+
+    if(sinreservas){cout<<endl<<"Actualmente no tiene ningun vehiculo alquilado."<<endl;}
+    else{
+        cout<<endl<<"¿Desea iniciar la navegacion hasta el con Google Maps?(si es si pulse S si no cualquier otra tecla) "
+           <<endl;
+        cin >>opcion;
+        if(opcion == 'S'){cout<<"No tiene la aplicacion Google Maps instalada"<<endl;}
+    }
+}
 
 void Cliente::historial()
 {
@@ -82,8 +107,19 @@ void Cliente::historial()
     {
         if(it->getId()==_id)
         {   if(sinreservas){cout << "Sus reservas hasta la fecha son: "<<endl<<endl;sinreservas = 0;}
-            cout << "\tEl dia " <<it->getInicio().date().day()<< " del " <<it->getInicio().date().month() <<" de "<<it->getInicio().date().year() <<" reservo el vehiculo con matricula "<< it->getMatricula()<<endl;
+            cout <<"Vehiculo con matricula "<< it->getMatricula()<<endl
+                 <<"Inicio de reserva "
+                <<it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString();
+
+            if(it->getFin()<QDateTime::currentDateTime())
+            {cout <<endl<<" Dicha reserva finalizo el dia ";}
+
+            else cout<<endl <<" Dicha reserva finaliza el dia ";
+
+            cout<<it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString();
+
         }
+
     }
     if(sinreservas) cout << endl << "No nos consta que haya reservado ningún vehiculo hasta la fecha"<<endl<<endl;
 
@@ -95,19 +131,20 @@ void        Cliente::menuCliente()
     do{
         do{
 
-            cout<<"\tBienvenido, has entrado como cliente"<<endl
+            cout<<"\tBienvenido "<<_id<<endl
                <<"\tElige una de las opciones"<<endl<<endl
               <<"\tA. Ver la localización de los vehículos."<<endl
              <<"\tB. Obtener el coche más cercano"<<endl
             <<"\tC. Realizar una petición de reserva"<<endl
             <<"\tD. Acceder a su propio historial"<<endl
-            <<"\tE. Salir"<<endl <<endl;
+            <<"\tE. ¿Donde aparque mi coche?"<<endl
+            <<"\tF. Salir"<<endl <<endl;
 
             cin>>opcion;
             switch (opcion) {
             case 'A':case 'a':
             {
-                displayVehiculosDisponibles();
+                displayVehiculos();
                 break;
             case 'B':case 'b':
                 {
@@ -124,37 +161,42 @@ void        Cliente::menuCliente()
                     historial();
                     break;
                 }
+                case 'E':case'e':
+                {
+                    dondeAparque();
+                    break;
+                }
                 default:
                     break;
                 }
             }
+            cout << endl;
 
 
-
-        }while((opcion<'A'||opcion>'E') && (opcion<'a'||opcion>'e'));
+        }while((opcion<'A'||opcion>'F') && (opcion<'a'||opcion>'f'));
     }
 
-    while(opcion!='E'&&opcion!='e');
+    while(opcion!='F'&&opcion!='f');
 
 
 }
 
-void Cliente::displayVehiculosDisponibles()
+void Cliente::displayVehiculos()
 {
     bool i=1;
+    cout<<endl<<"Por motivos de seguridad no se mostrara la localizacion de los vehiculos que esten"<<
+          " reservados en estos momentos. Sin embargo, puede ver sus matriculas por si quiere"<<
+          " reservarlo para otro momento"<<endl;
     for(list<Vehiculo>::iterator it = _plataforma->getVehiculos().begin(); it!= _plataforma->getVehiculos().end();it++)
     {
 
 
-        if(it==_plataforma->getVehiculos().begin())  cout << "| Matricula\t| Latitud\t| Longitud"<<endl;
+        if(it==_plataforma->getVehiculos().begin()){  cout << "| Matricula\t| Latitud\t| Longitud"<<endl; i=0;}
         if( it->getDisponible())cout<< "| "<<it->getMatricula()<<"\t| "<<it->getLocalizacion()[0]<<"\t| "<<it->getLocalizacion()[1]<<endl;
+        else cout<< "| "<<it->getMatricula()<<"\t| "<<"------"<<"\t| "<<"------"<<endl;
 
-
-        /*if( it->getDisponible())
-        {
-            cout<<"| "<<it->getMatricula()<<"\t|\t"<<it->getLocalizacion()[1]<<"\t|\t"<<it->getLocalizacion()[0]<<"\t|"<<endl;
-        }*/
     }
+    if (i) cout<< "No disponemos de vehiculos en este momento"<<endl;
 
 }
 
@@ -179,7 +221,7 @@ void Cliente::displayVehiculoCercano()
         }
 
         if(l!=999999) cout << "El vehiculo más cercano a su posicion es " << itCercano->getMatricula()<<
-                           " a "<< distanciaAVehiculo(itCercano->getLocalizacion())*111.319<<"KM"<<endl;
+                              " a "<< distanciaAVehiculo(itCercano->getLocalizacion())*111.319<<"KM"<<endl;
         else cout << "No disponemos de vehiculos libres"<< endl;
     }
     else cout << "No disponemos de vehiculos libres"<< endl;

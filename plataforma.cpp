@@ -7,129 +7,10 @@ void Plataforma::iniciar()
 {
 
     pullDatabase();
-
-    //double loc[2]={45.3659,65.9896};
-
-    /*Cliente veh("1111AAA",this,loc);
-    loc[2]=89.4532;
-    loc[1]=152.236;
-    _clientes.push_back(veh);
-    Cliente veh1("2222BBB",this,loc);
-    loc[2]=52.4656;
-    loc[1]=12.236;
-    _clientes.push_back(veh1);
-    Cliente veh2("5555EEE",this,loc);
-    loc[2]=91.4532;
-    loc[1]=2.236;
-    _clientes.push_back(veh2);
-    Cliente veh3("6666FFF",this,loc);
-    loc[2]=9.4532;
-    loc[1]=152.236;
-    _clientes.push_back(veh3);
-    Cliente veh4("7777GGG",this,loc);
-    loc[2]=8.4532;
-    loc[1]=15.236;
-    _clientes.push_back(veh4);
-    Cliente veh5("8888HHH",this,loc);
-    loc[2]=88.4532;
-    loc[1]=15.236;
-    _clientes.push_back(veh5);
-    Cliente veh6("9999III",this,loc);
-    loc[2]=48.4532;
-    loc[1]=15.236;
-    _clientes.push_back(veh6);
-    Cliente veh7("0000JJJ",this,loc);
-    loc[2]=8.4532;
-    loc[1]=175.236;
-    //_clientes.push_back(veh7);
-    VIP veh8("3333CCC",this,loc);
-    loc[2]=8.4532;
-    loc[1]=115.236;
-    _VIPs.push_back(veh8);
-    VIP veh9("4444DDD",this,loc);
-    loc[2]=85.4532;
-    loc[1]=15.236;
-    _VIPs.push_back(veh9);*/
-
-
-    /*double loc[2]={45.3659,65.9896};
-    Vehiculo veh("1000ABC",loc,5,1);
-    loc[2]=89.4532;
-    loc[1]=152.236;
-    _vehiculos.push_back(veh);
-    Vehiculo veh1("2000DEF",loc,8,1);
-    loc[2]=52.4656;
-    loc[1]=12.236;
-    _vehiculos.push_back(veh1);
-    Vehiculo veh2("3000GHI",loc,5,1);
-    loc[2]=91.4532;
-    loc[1]=2.236;
-    _vehiculos.push_back(veh2);
-    Vehiculo veh3("4000JKL",loc,4,1);
-    loc[2]=9.4532;
-    loc[1]=152.236;
-    _vehiculos.push_back(veh3);
-    Vehiculo veh4("5000MNO",loc,3,1);
-    loc[2]=8.4532;
-    loc[1]=15.236;
-    _vehiculos.push_back(veh4);
-    Vehiculo veh5("6000PQR",loc,3,1);
-    loc[2]=88.4532;
-    loc[1]=15.236;
-    _vehiculos.push_back(veh5);
-    Vehiculo veh6("7000STU",loc,3,1);
-    loc[2]=48.4532;
-    loc[1]=15.236;
-    _vehiculos.push_back(veh6);
-    Vehiculo veh7("8000VWX",loc,3,1);
-    loc[2]=8.4532;
-    loc[1]=175.236;
-    _vehiculos.push_back(veh7);
-    Vehiculo veh8("9000XZA",loc,3,1);
-    loc[2]=8.4532;
-    loc[1]=115.236;
-    _vehiculos.push_back(veh8);
-    Vehiculo veh9("1100BCD",loc,3,1);
-    loc[2]=85.4532;
-    loc[1]=15.236;
-    _vehiculos.push_back(veh9);*/
-
-
-
-
     actualizarReservas();
     while(login()){actualizarReservas();}
-
+    actualizarReservas();
     pushDatabase();
-
-    list <Vehiculo>::iterator itV;
-    for(itV=_vehiculos.begin();itV!=_vehiculos.end();itV++)
-    {
-        cout <<"\tVehiculo " << itV->getMatricula() << " con capacidad para "<< itV->getCapacidad()<< " personas."<<endl;
-    }
-    cout<<endl;
-
-    list <Cliente>::iterator itC;
-    for(itC=_clientes.begin();itC!=_clientes.end();itC++)
-    {
-        cout <<"\tCliente " << itC->getID() << endl;
-
-    }
-    list <Administrador>::iterator itA;
-    for(itA=_administradores.begin();itA!=_administradores.end();itA++)
-    {
-        cout <<"\tAdministrador " << itA->getID() << endl;
-
-    }
-
-
-
-    cout << "\tEl numero de clientes es: "              << _clientes.size()        << endl
-         << "\tEl numero de administradores es: "       << _administradores.size() <<endl
-         << "\tY el de Vehiculos es "                   << _vehiculos.size()       << endl << endl;
-
-
-
 
 }
 
@@ -139,11 +20,6 @@ void Plataforma::iniciar()
 
 void Plataforma::pushDatabase()
 {
-
-
-
-
-
     //******************************************************************
 
 
@@ -215,17 +91,6 @@ void Plataforma::pushDatabase()
 
         vips.close();
     }
-
-
-
-
-
-
-
-
-
-
-
 
     //************************************************************************************
 
@@ -467,14 +332,25 @@ list <Administrador>::iterator Plataforma::buscarAdministrador(string id)
 
 void Plataforma::actualizarReservas()
 {
-    for(list <Reserva>::iterator it = _reservas.begin();it!=_reservas.end();it++)
+    for(list<Vehiculo>::iterator it = _vehiculos.begin();it!=_vehiculos.end();it++)
     {
-        if(it->getFin()<QDateTime::currentDateTime()||it->getInicio()>QDateTime::currentDateTime())   buscarVehiculo(it->getMatricula())->setDisponible(1);
-        else buscarVehiculo(it->getMatricula())->setDisponible(0);
+        if(reservaActiva(it->getMatricula())) it->setDisponible(0);
+        else it->setDisponible(1);
     }
+
 }
 
 
+bool Plataforma::reservaActiva(string matricula)
+{
+    list <Vehiculo>::iterator veh = buscarVehiculo(matricula);
+        for(list <Reserva>::iterator it = _reservas.begin();it!=_reservas.end();it++)
+        {
+            if(it->getMatricula()==veh->getMatricula() && it->getFin()>QDateTime::currentDateTime() && it->getInicio()<QDateTime::currentDateTime()) return 1;
+
+        }
+    return 0;
+}
 
 
 
@@ -519,7 +395,6 @@ bool Plataforma::login()
            << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
         cin>>id;
-        //id="salir";
         if(id == "salir") return 0;
 
     }while(validacionId(id)==0 || existeUsuario(id)==0);
@@ -568,7 +443,7 @@ bool Plataforma::existeUsuario(string id)
 
     if( !esCliente(id) && !esAdministrador(id) && !esVIP(id)  )
     {
-        //cout<<"No existe dicho usuario"<<endl;
+
         return 0;
     }
     return 1;

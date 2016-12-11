@@ -22,8 +22,9 @@ public:
 
     double * getLocalizacion();
     void setLocalizacion(double localizacion[]);
-    void displayVehiculosDisponibles();
+    void displayVehiculos();
     Vehiculo vehiculoCercano();
+    void dondeAparque();
     void reservar();
     void historial();
     void menuCliente();
