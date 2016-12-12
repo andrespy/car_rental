@@ -343,10 +343,9 @@ void Plataforma::actualizarReservas()
 
 bool Plataforma::reservaActiva(string matricula)
 {
-    list <Vehiculo>::iterator veh = buscarVehiculo(matricula);
         for(list <Reserva>::iterator it = _reservas.begin();it!=_reservas.end();it++)
         {
-            if(it->getMatricula()==veh->getMatricula() && it->getFin()>QDateTime::currentDateTime() && it->getInicio()<QDateTime::currentDateTime()) return 1;
+            if(it->getMatricula()==matricula && it->getFin()>QDateTime::currentDateTime() && it->getInicio()<QDateTime::currentDateTime()) return 1;
 
         }
     return 0;

@@ -98,8 +98,15 @@ void        Administrador::modVehiculo()
             cout<<"Introduzca la nueva matricula: ";
             cin>>matricula;
         }
-        while(_plataforma->validarMatricula(matricula)&& _plataforma->esVehiculo(matricula));
+        while(!_plataforma->validarMatricula(matricula) && _plataforma->esVehiculo(matricula));
+        string matriculaAntigua=it->getMatricula();
         it->setMatricula(matricula); // hacer un set de la matricula
+        for(list <Reserva>::iterator it = _plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+        {
+            if(matriculaAntigua == it->getMatricula()) it->setMatricula(matricula);
+        }
+
+
         break;
     }
     case 'B': case 'b':
@@ -123,13 +130,13 @@ void        Administrador::modUsuario()
         cout << "Introduzca el id del usuario que desea modificar: ";
         cin >> id;
         
-    } while(!_plataforma->validacionId(id));
+    } while(!_plataforma->validacionId(id)||!_plataforma->existeUsuario(id));
     string idn;
     do{
         cout << "Introduzca el nuevo id: ";
         cin>>idn;
-        if(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn) || _plataforma->esVIP(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
-    }while(_plataforma->esAdministrador(idn)    ||  _plataforma->esCliente(idn) ||  !_plataforma->validacionId(idn));
+        if(_plataforma->existeUsuario(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
+    }while(_plataforma->existeUsuario(idn));
     
     if(_plataforma->esAdministrador(id))
     {_plataforma->buscarAdministrador(id)->setID(idn);
@@ -191,7 +198,6 @@ void Administrador::menu()
             <<"\tE.\tSalir"<<endl<<"\t";
             
             cin>>opcion;
-            //opcion='F';
         }while(opcion<'A'||opcion>'F' && opcion<'a'||opcion>'f');
         
         switch (opcion)
@@ -216,15 +222,7 @@ void Administrador::menu()
             revisarVehiculos();
             break;
         }
-        case 'F': case 'f':
-        {
-            cout<<"introduce ID"<< endl;
-            string id;
-            cin >> id;
-            if(_plataforma->existeUsuario(id)==1) cout << "existe"<<endl;
-            else cout << "No existe"<<endl;
-            break;
-        }
+
         default: break;
         } //switch
     }
@@ -318,12 +316,8 @@ void Administrador::historicoVehiculo()
             {
                 cout<<"Matricula: "<<it->getMatricula()<<endl
                    <<"Usuario: "<<it->getId()<<endl
-                  <<"Inicio: "<< it->getInicio().date().day()<<"/"
-                 <<it->getInicio().date().month()<<"/"<<it->getInicio().date().year()
-                << " a las " <<it->getInicio().time().hour()<<":"<<it->getInicio().time().minute()<<endl
-                <<"Fin: "<< it->getFin().date().day()<<"/"
-               <<it->getFin().date().month()<<"/"<<it->getFin().date().year()
-              << " a las " <<it->getFin().time().hour()<<":"<<it->getFin().time().minute()<<endl<<endl<<endl;
+                  <<"Inicio: "<< it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl
+                <<"Fin: "<< it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl<<endl;
             }
         }
     }
@@ -346,12 +340,8 @@ void Administrador::historicoUsuario()
             {
                 cout<<"Usuario: "<<it->getId()<<endl
                    <<"Matricula: "<<it->getMatricula()<<endl
-                  <<"Inicio: "<< it->getInicio().date().day()<<"/"
-                 <<it->getInicio().date().month()<<"/"<<it->getInicio().date().year()
-                << " a las " <<it->getInicio().time().hour()<<":"<<it->getInicio().time().minute()<<endl
-                <<"Fin: "<< it->getFin().date().day()<<"/"
-               <<it->getFin().date().month()<<"/"<<it->getFin().date().year()
-              << " a las " <<it->getFin().time().hour()<<":"<<it->getFin().time().minute()<<endl<<endl<<endl;
+                  <<"Inicio: "<< it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl
+                <<"Fin: "<< it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl<<endl;
             }
         }
     }

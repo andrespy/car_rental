@@ -30,7 +30,7 @@ bool Cliente::colisionReserva( Reserva  reserva)
         if(it->getMatricula()==reserva.getMatricula() &&
 
                 ((reserva.getInicio()<it->getInicio() && reserva.getFin()>reserva.getInicio())||
-                 (reserva.getInicio()<it->getFin()&&reserva.getFin()>it->getFin())||
+                 (reserva.getInicio()<it->getFin() && reserva.getFin()>it->getFin())||
                  (reserva.getInicio()<it->getInicio()&&reserva.getFin()>it->getFin())||
                  (reserva.getInicio()>it->getInicio()&&reserva.getFin()<it->getFin())))
 
@@ -116,7 +116,7 @@ void Cliente::historial()
 
             else cout<<endl <<" Dicha reserva finaliza el dia ";
 
-            cout<<it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString();
+            cout<<it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl;
 
         }
 
