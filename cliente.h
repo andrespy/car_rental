@@ -25,7 +25,7 @@ public:
     void displayVehiculos();
     Vehiculo vehiculoCercano();
     void dondeAparque();
-    void reservar();
+    virtual void reservar();
     void historial();
     void menuCliente();
     void displayVehiculoCercano();

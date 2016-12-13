@@ -89,7 +89,7 @@ void        Administrador::modVehiculo()
             << "\tC.\tVolver"<<endl;
         cin>> opcion;
     }
-    while(opcion<'A'||opcion>'C' && opcion<'a'||opcion>'c');
+    while((opcion<'A'||opcion>'C') && (opcion<'a'||opcion>'c'));
     switch (opcion) {
     case 'A': case 'a':
     {
@@ -171,7 +171,7 @@ void        Administrador::rmUsuario()
     string id;
     do{
         
-        cout << "Introduczca id del el usuario desea eliminar: ";
+        cout << "Introduzca id del el usuario desea eliminar: ";
         cin >> id;
     }
     while(!_plataforma->validacionId(id));
@@ -196,9 +196,8 @@ void Administrador::menu()
             <<"\tC.\tHistorico"<<endl
             <<"\tD.\tRevisar Vehiculos"<<endl
             <<"\tE.\tSalir"<<endl<<"\t";
-            
-            cin>>opcion;
-        }while(opcion<'A'||opcion>'F' && opcion<'a'||opcion>'f');
+            cin >>opcion;
+        }while((opcion<'A'||opcion>'F') && (opcion<'a'||opcion>'f'));
         
         switch (opcion)
         {
@@ -278,9 +277,10 @@ void Administrador::submenuHistorico()
     char opcion;
     do{
         cout<<"\tA.\tAcceder a historico de un vehiculo"<<endl
-           <<"\tB.\tAcceder a historico de un usuario"<<endl<<endl;
+           <<"\tB.\tAcceder a historico de un usuario"<<endl
+          <<"\tC.\tVolver"<<endl<<endl;
         cin>>opcion;
-    }while(opcion!='A' && opcion!='B' && opcion!='a' && opcion!='b' );
+    }while((opcion<'A' || opcion>'C') && (opcion<'a' || opcion!='c') );
     
     switch(opcion)
     {

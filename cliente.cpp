@@ -1,6 +1,7 @@
 #include "cliente.h"
 #include "vehiculo.h"
 #include "reserva.h"
+#include <stdlib.h>
 //
 //
 //     **********    CLIENTE    *******
@@ -29,13 +30,25 @@ bool Cliente::colisionReserva( Reserva  reserva)
     {
         if(it->getMatricula()==reserva.getMatricula() &&
 
-                ((reserva.getInicio()<it->getInicio() && reserva.getFin()>reserva.getInicio())||
-                 (reserva.getInicio()<it->getFin() && reserva.getFin()>it->getFin())||
-                 (reserva.getInicio()<it->getInicio()&&reserva.getFin()>it->getFin())||
-                 (reserva.getInicio()>it->getInicio()&&reserva.getFin()<it->getFin())))
+                ((reserva.getInicio()<it->getInicio() && reserva.getFin()>reserva.getInicio()
+                  &&(reserva.getInicio().time()<it->getInicio().time() && reserva.getFin().time()>reserva.getInicio().time()))||
+
+                 (reserva.getInicio()<it->getFin() && reserva.getFin()>it->getFin()
+                  &&(reserva.getInicio().time()<it->getFin().time() && reserva.getFin().time()>it->getFin().time()))||
+
+
+                 (reserva.getInicio()<it->getInicio()&&reserva.getFin()>it->getFin()
+                  &&(reserva.getInicio().time()<it->getInicio().time()&&reserva.getFin().time()>it->getFin().time()))||
+
+                 (reserva.getInicio()>it->getInicio()&&reserva.getFin()<it->getFin())
+                 &&(reserva.getInicio().time()>it->getInicio().time()&&reserva.getFin().time()<it->getFin().time())))
+
+
+
+
 
         {
-            cout <<endl<<"Error de colision entre reservas"<<endl;
+
             return 1;
 
         }
@@ -45,7 +58,7 @@ bool Cliente::colisionReserva( Reserva  reserva)
 
 
 
-void Cliente::reservar()
+ void Cliente::reservar()
 {
     string matricula;
 
@@ -53,6 +66,7 @@ void Cliente::reservar()
     {
         cout << "Introduce la matrIcula del coche que desea reservar: ";
         cin >> matricula;
+
         cout<<endl;
         if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
         /*else if(!_plataforma->buscarVehiculo(matricula)->getDisponible())
@@ -61,11 +75,12 @@ void Cliente::reservar()
     }
     while(!_plataforma->esVehiculo(matricula));
 
-    Reserva reserva(_id,_plataforma->buscarVehiculo(matricula)->getMatricula());
+    Reserva reserva(_id,matricula);
 
     do{
 
         reserva.pideFecha();
+    if(colisionReserva(reserva)) cerr << "Error de colision de reservas"<<endl;
     }while (colisionReserva(reserva));
     _plataforma->getReservas().push_back(reserva);
     _plataforma->actualizarReservas();
@@ -95,6 +110,7 @@ void Cliente::dondeAparque()
         cout<<endl<<"¿Desea iniciar la navegacion hasta el con Google Maps?(si es si pulse S si no cualquier otra tecla) "
            <<endl;
         cin >>opcion;
+        cin.clear();
         if(opcion == 'S'){cout<<"No tiene la aplicacion Google Maps instalada"<<endl;}
     }
 }
@@ -106,10 +122,11 @@ void Cliente::historial()
     for(list <Reserva>::iterator it =_plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
     {
         if(it->getId()==_id)
-        {   if(sinreservas){cout << "Sus reservas hasta la fecha son: "<<endl<<endl;sinreservas = 0;}
+        {
+            if(sinreservas){cout << "Sus reservas hasta la fecha son: "<<endl<<endl;sinreservas = 0;}
             cout <<"Vehiculo con matricula "<< it->getMatricula()<<endl
-                 <<"Inicio de reserva "
-                <<it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString();
+                <<"Inicio de reserva "
+               <<it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString();
 
             if(it->getFin()<QDateTime::currentDateTime())
             {cout <<endl<<" Dicha reserva finalizo el dia ";}
