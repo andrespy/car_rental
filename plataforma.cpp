@@ -385,15 +385,32 @@ list<Reserva>& Plataforma::getReservas()
 
 
 
+
+double  Plataforma::randomloc(bool longlat)
+{
+    double x;
+
+
+
+    if(longlat) x = double (4.6*sin(QDateTime::currentDateTime().time().msec()^2)-4.14);
+    else x = double (4*sin(QDateTime::currentDateTime().time().msec()^2)+39);
+    return x;
+}
+
+
+
+
 bool Plataforma::login()
 {
     string id;
 
     do{
+        cout<<endl<<QDateTime::currentDateTime().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl;
         cout<<"Por favor introduzca su ID de usuario para acceder al sistema"<<endl
            << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
         cin>>id;
+        __fpurge(stdin);
         if(id == "salir") return 0;
 
     }while(validacionId(id)==0 || existeUsuario(id)==0);

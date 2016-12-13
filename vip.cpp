@@ -51,8 +51,9 @@ void VIP::reservar()
         reserva.pideFecha();
         if(colisionReserva(reserva)) cerr << "Error de colision de reservas"<<endl;
     }while (colisionReserva(reserva));
+
     Reserva pruebaReserva(reserva);
-    pruebaReserva.getInicio().time().setHMS(pruebaReserva.getInicio().time().hour()-5,pruebaReserva.getInicio().time().minute(),pruebaReserva.getInicio().time().second());
+    pruebaReserva.setInicio(pruebaReserva.getInicio().addSecs(-3600*5));
     if(!colisionReserva(pruebaReserva))
     {
         char opcion;

@@ -18,11 +18,13 @@ void        Administrador::addVehiculo()
         cout<<"\t Nuevo Vehiculo:"<<endl
            <<"\tIntroduzca la matricula del coche: ";
         cin>>matricula;
+        __fpurge(stdin);
         if(_plataforma->esVehiculo(matricula)) cout <<"Dicho vehiculo ya existe en nuestro sistema"<<endl;
         
     }while(!_plataforma->validarMatricula(matricula)||_plataforma->esVehiculo(matricula));
     cout <<"\tIntroduzca la capacidad del coche: ";
     cin>>capacidad;
+    __fpurge(stdin);
     cout <<endl;
     Vehiculo veh1(matricula,int(capacidad),1);
     _plataforma->getVehiculos().push_back(veh1);
@@ -35,10 +37,11 @@ void        Administrador::addAdministrador()
     do
     {
         cout<<"\tNuevo Administrador:"<<endl
-           <<"\tIntroduzca un ID para el nuevo Administrador"<<endl;
+           <<"\tIntroduzca un ID para el nuevo Administrador (teclee volver si desea volver al menu)"<<endl;
         cin  >> id;
+        __fpurge(stdin);
     }
-    while(!_plataforma->validacionId(id));
+    while(id!="volver" && !_plataforma->validacionId(id));
     Administrador admin( id ,  this->_plataforma );
     _plataforma->getAdministradores().push_back(admin);
     
@@ -51,6 +54,7 @@ void        Administrador::addCliente()
         cout<<"\tNuevo Cliente:"<<endl
            <<"\tIntroduzca un ID para el nuevo Cliente"<<endl;
         cin  >> id;
+        __fpurge(stdin);
     }
     while(_plataforma->validacionId(id)!=1);
     Cliente client1( id , _plataforma );
@@ -64,6 +68,7 @@ void        Administrador::addVIP()
         cout<<"\tNuevo VIP:"<<endl
            <<"\tIntroduzca un ID para el nuevo VIP"<<endl;
         cin  >> id;
+        __fpurge(stdin);
     }
     while(_plataforma->validacionId(id)!=1);
     VIP VIP1( id ,  _plataforma );
@@ -78,6 +83,7 @@ void        Administrador::modVehiculo()
     {
         cout<< "Introduzca la matricula del vehiculo que desea modificar: " ;
         cin >> matricula;
+        __fpurge(stdin);
     }
     while(!_plataforma->esVehiculo(matricula));
     list <Vehiculo>::iterator it = _plataforma->buscarVehiculo(matricula);
@@ -88,6 +94,7 @@ void        Administrador::modVehiculo()
             << "\tB.\tCapacidad"<<endl
             << "\tC.\tVolver"<<endl;
         cin>> opcion;
+        __fpurge(stdin);
     }
     while((opcion<'A'||opcion>'C') && (opcion<'a'||opcion>'c'));
     switch (opcion) {
@@ -97,6 +104,7 @@ void        Administrador::modVehiculo()
         {
             cout<<"Introduzca la nueva matricula: ";
             cin>>matricula;
+            __fpurge(stdin);
         }
         while(!_plataforma->validarMatricula(matricula) && _plataforma->esVehiculo(matricula));
         string matriculaAntigua=it->getMatricula();
@@ -114,6 +122,7 @@ void        Administrador::modVehiculo()
         unsigned int capacidad; // unsigned para prevenir que se introduzca una capacidad negativa
         cout<<"Introduzca la nueva capacidad del vehiculo: ";
         cin >> capacidad;
+        __fpurge(stdin);
         it->setCapacidad(int(capacidad)); //hacer un set de la capacidad
         break;
     }
@@ -129,12 +138,14 @@ void        Administrador::modUsuario()
     do{
         cout << "Introduzca el id del usuario que desea modificar: ";
         cin >> id;
+        __fpurge(stdin);
         
     } while(!_plataforma->validacionId(id)||!_plataforma->existeUsuario(id));
     string idn;
     do{
         cout << "Introduzca el nuevo id: ";
         cin>>idn;
+        __fpurge(stdin);
         if(_plataforma->existeUsuario(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
     }while(_plataforma->existeUsuario(idn));
     
@@ -160,6 +171,7 @@ void        Administrador::rmVehiculo()
         
         cout << "Introduzca la matrícula del vehiculo que desea eliminar: ";
         cin >> matricula;
+        __fpurge(stdin);
     }
     while(!_plataforma->validarMatricula(matricula) || !_plataforma->esVehiculo(matricula));
     _plataforma->getVehiculos().erase(_plataforma->buscarVehiculo(matricula));
@@ -173,6 +185,7 @@ void        Administrador::rmUsuario()
         
         cout << "Introduzca id del el usuario desea eliminar: ";
         cin >> id;
+        __fpurge(stdin);
     }
     while(!_plataforma->validacionId(id));
     
@@ -197,6 +210,7 @@ void Administrador::menu()
             <<"\tD.\tRevisar Vehiculos"<<endl
             <<"\tE.\tSalir"<<endl<<"\t";
             cin >>opcion;
+            __fpurge(stdin);
         }while((opcion<'A'||opcion>'F') && (opcion<'a'||opcion>'f'));
         
         switch (opcion)
@@ -236,6 +250,7 @@ void Administrador::submenuVehiculo()
           <<"\tC.\tModificar Vehiculo"<<endl
          <<"\tD.\tVolver"<<endl<<endl;
         cin>>opcion;
+        __fpurge(stdin);
     }while((opcion<'A'||opcion>'D')&&(opcion<'a'||opcion>'d'));
     switch(opcion)
     {
@@ -258,6 +273,7 @@ void Administrador::submenuUsuario()
         <<"\t E.\tModificar usuario"<<endl
         <<"\tF.\tVolver"<<endl<<endl;
         cin>>opcion;
+        __fpurge(stdin);
     }while((opcion<'A'||opcion>'F')&&(opcion<'a'||opcion>'f'));
     
     switch(opcion)
@@ -280,6 +296,7 @@ void Administrador::submenuHistorico()
            <<"\tB.\tAcceder a historico de un usuario"<<endl
           <<"\tC.\tVolver"<<endl<<endl;
         cin>>opcion;
+        __fpurge(stdin);
     }while((opcion<'A' || opcion>'C') && (opcion<'a' || opcion!='c') );
     
     switch(opcion)
@@ -307,6 +324,7 @@ void Administrador::historicoVehiculo()
     do{
         cout << "Introduce la matrícula del vehículo: (teclee volver para volver al menu)"<<endl;
         cin >> matricula;
+        __fpurge(stdin);
     }while (matricula!="volver" && !_plataforma->esVehiculo(matricula) );
     if(matricula!="volver")
     {
@@ -330,6 +348,7 @@ void Administrador::historicoUsuario()
     do{
         cout << "Introduce el id del usuario: (teclee volver para volver al menu)"<<endl;
         cin >> id;
+        __fpurge(stdin);
         cout <<endl;
     }while (id!="volver" && !_plataforma->existeUsuario(id) );
     if(id!="volver")

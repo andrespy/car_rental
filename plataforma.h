@@ -12,6 +12,7 @@
 #include "cliente.h"
 #include "vip.h"
 #include "reserva.h"
+#include <stdio_ext.h>
 using namespace std;
 
 
@@ -64,6 +65,8 @@ public:
     bool validacionId(string id);
     bool validarMatricula(string matricula);
 
+
+    double  randomloc(bool longlat);
 
 
 

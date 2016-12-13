@@ -66,6 +66,7 @@ bool Cliente::colisionReserva( Reserva  reserva)
     {
         cout << "Introduce la matrIcula del coche que desea reservar: ";
         cin >> matricula;
+        __fpurge(stdin);
 
         cout<<endl;
         if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
@@ -110,7 +111,7 @@ void Cliente::dondeAparque()
         cout<<endl<<"¿Desea iniciar la navegacion hasta el con Google Maps?(si es si pulse S si no cualquier otra tecla) "
            <<endl;
         cin >>opcion;
-        cin.clear();
+        __fpurge(stdin);
         if(opcion == 'S'){cout<<"No tiene la aplicacion Google Maps instalada"<<endl;}
     }
 }
@@ -158,6 +159,7 @@ void        Cliente::menuCliente()
             <<"\tF. Salir"<<endl <<endl;
 
             cin>>opcion;
+            __fpurge(stdin);
             switch (opcion) {
             case 'A':case 'a':
             {
@@ -246,39 +248,7 @@ void Cliente::displayVehiculoCercano()
 
 
 
-/*void Cliente::displayCochesCercanos()
-                                                        {
-                                                            list<Vehiculo>  vehiculosCercanos;
-                                                            list<Vehiculo>::iterator itC;
-                                                            for(list<Vehiculo>::iterator itC = _plataforma->getVehiculos().begin(); itC!= _plataforma->getVehiculos().end();itC++)
-                                                            {
-                                                               vehiculosCercanos.push_back(*itC);
-                                                            }
 
-                                                            for(list<Vehiculo>::iterator it = vehiculosCercanos.begin(); it!= vehiculosCercanos.end();it++)
-                                                            {
-                                                                if( !(it->getDisponible()))
-                                                                {
-                                                                   vehiculosCercanos.remove(*it);
-                                                                    it = vehiculosCercanos.begin();
-                                                                }
-
-
-                                                            }
-
-                                                            list<Vehiculo>::iterator it;
-                                                            do
-                                                            {
-
-                                                                it = cocheCercano(vehiculosCercanos);
-                                                                cout << it->getMatricula() <<" a " << distanciaAVehiculo(it->getLocalizacion()) << " unidades"<< endl;
-                                                                vehiculosCercanos.remove(*it);
-
-                                                            }
-                                                            while(vehiculosCercanos.begin()!=vehiculosCercanos.end());
-
-                                                        }
-                                                        */
 double Cliente::distanciaAVehiculo(double * localizacion)
 {
     return sqrt(pow((_localizacion[1]-localizacion[1]),2)+pow((_localizacion[0]-localizacion[0]),2));
