@@ -16,18 +16,21 @@ void        Administrador::addVehiculo()
     unsigned int capacidad;
     do{
         cout<<"\t Nuevo Vehiculo:"<<endl
-           <<"\tIntroduzca la matricula del coche: ";
+           <<"Introduzca la matricula del coche: (teclee cancelar si asi lo desea):"<<endl;
         cin>>matricula;
         __fpurge(stdin);
-        if(_plataforma->esVehiculo(matricula)) cout <<"Dicho vehiculo ya existe en nuestro sistema"<<endl;
+        if(matricula!="cancelar"&&_plataforma->esVehiculo(matricula)) cout <<endl<<"Dicho vehiculo ya existe en nuestro sistema"<<endl;
         
-    }while(!_plataforma->validarMatricula(matricula)||_plataforma->esVehiculo(matricula));
-    cout <<"\tIntroduzca la capacidad del coche: ";
-    cin>>capacidad;
-    __fpurge(stdin);
-    cout <<endl;
-    Vehiculo veh1(matricula,int(capacidad),1);
-    _plataforma->getVehiculos().push_back(veh1);
+    }while(matricula!="cancelar"&&!_plataforma->validarMatricula(matricula)||_plataforma->esVehiculo(matricula));
+    if(matricula!="cancelar")
+    {
+        cout <<"\tIntroduzca la capacidad del coche: ";
+        cin>>capacidad;
+        __fpurge(stdin);
+        cout <<endl;
+        Vehiculo veh1(matricula,int(capacidad),1);
+        _plataforma->getVehiculos().push_back(veh1);
+    }
     
 }
 

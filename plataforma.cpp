@@ -425,9 +425,9 @@ bool Plataforma::login()
     string id;
 
     do{
-        cout<<endl<<"\t\t"<<QDateTime::currentDateTime().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl;
-        cout<<"Por favor introduzca su ID de usuario para acceder al sistema"<<endl
-           << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
+        cout<<endl<<"\t\tSon las "<<QDateTime::currentDateTime().toString("HH:mm 'del' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl;
+        cout<<"\tPor favor introduzca su ID de usuario para acceder al sistema"<<endl
+           << "\t\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
         cin>>id;
         __fpurge(stdin);
