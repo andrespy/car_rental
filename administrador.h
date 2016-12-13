@@ -22,9 +22,7 @@ public:
     Administrador(string id, Plataforma *plataforma):Usuario(id, plataforma){}
 
 
-    //          BUSCAR
-    bool existeUsuario(string id);
-    bool existeVehiculo(string matricula);
+
 
 
 
@@ -48,7 +46,7 @@ public:
 
 
 
-    Vehiculo * list_vehiculos();
+
 
     //          MENUS
 
