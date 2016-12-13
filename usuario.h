@@ -14,7 +14,6 @@ public:
     Usuario(string id, Plataforma *plat);
     Usuario(Plataforma *plat);
     Usuario(const Usuario &usuario);
-    Vehiculo buscar(string matricula);
     Usuario & operator=(Usuario usr);
     Plataforma* getPlataforma();
 
