@@ -70,8 +70,7 @@ bool Cliente::colisionReserva( Reserva  reserva)
 
         cout<<endl;
         if(!_plataforma->esVehiculo(matricula)) cout << "No existe dicho vehiculo."<<endl;
-        /*else if(!_plataforma->buscarVehiculo(matricula)->getDisponible())
-                cout<<"Dicho vehiculo no esta disponible en estos momentos."<<endl;*/
+
 
     }
     while(!_plataforma->esVehiculo(matricula));

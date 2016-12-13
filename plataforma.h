@@ -27,6 +27,9 @@ public:
 
     void pullDatabase();
     void pushDatabase();
+    void actualizarLoc();
+
+
 
     void setUsuario(const Usuario &usuario);
     void setVehiculo(const Vehiculo &vehiculo);

@@ -42,9 +42,10 @@ void        Administrador::addAdministrador()
         __fpurge(stdin);
     }
     while(id!="volver" && !_plataforma->validacionId(id));
-    Administrador admin( id ,  this->_plataforma );
-    _plataforma->getAdministradores().push_back(admin);
-    
+    if(id!="volver"){
+        Administrador admin( id ,  this->_plataforma );
+        _plataforma->getAdministradores().push_back(admin);
+    }
 }
 
 void        Administrador::addCliente()
@@ -52,13 +53,15 @@ void        Administrador::addCliente()
     string id;
     do{
         cout<<"\tNuevo Cliente:"<<endl
-           <<"\tIntroduzca un ID para el nuevo Cliente"<<endl;
+           <<"\tIntroduzca un ID para el nuevo Cliente (teclee volver si desea volver al menu)"<<endl;
         cin  >> id;
         __fpurge(stdin);
     }
-    while(_plataforma->validacionId(id)!=1);
-    Cliente client1( id , _plataforma );
-    _plataforma->getClientes().push_back(client1);
+    while(id!="volver" &&!_plataforma->validacionId(id));
+    if(id!="volver"){
+        Cliente client1( id , _plataforma );
+        _plataforma->getClientes().push_back(client1);
+    }
     
 }
 void        Administrador::addVIP()
@@ -66,13 +69,15 @@ void        Administrador::addVIP()
     string id;
     do{
         cout<<"\tNuevo VIP:"<<endl
-           <<"\tIntroduzca un ID para el nuevo VIP"<<endl;
+           <<"\tIntroduzca un ID para el nuevo VIP (teclee volver si desea volver al menu)"<<endl;
         cin  >> id;
         __fpurge(stdin);
     }
-    while(_plataforma->validacionId(id)!=1);
-    VIP VIP1( id ,  _plataforma );
-    _plataforma->getVIP().push_back(VIP1);
+    while(id!="volver"&&_plataforma->validacionId(id)!=1);
+    if(id!="volver"){
+        VIP VIP1( id ,  _plataforma );
+        _plataforma->getVIP().push_back(VIP1);
+    }
 
 }
 
@@ -81,87 +86,92 @@ void        Administrador::modVehiculo()
     string matricula;
     do
     {
-        cout<< "Introduzca la matricula del vehiculo que desea modificar: " ;
+        cout<< "Introduzca la matricula del vehiculo que desea modificar (teclee volver si desea volver al menu) "<<endl ;
         cin >> matricula;
         __fpurge(stdin);
     }
-    while(!_plataforma->esVehiculo(matricula));
-    list <Vehiculo>::iterator it = _plataforma->buscarVehiculo(matricula);
-    char opcion;
-    do{
-        cout<< "Introduzca el parámetro que desea modificar:"<<endl
-            << "\tA.\tMatricula"<<endl
-            << "\tB.\tCapacidad"<<endl
-            << "\tC.\tVolver"<<endl;
-        cin>> opcion;
-        __fpurge(stdin);
-    }
-    while((opcion<'A'||opcion>'C') && (opcion<'a'||opcion>'c'));
-    switch (opcion) {
-    case 'A': case 'a':
+    while(matricula!="volver"&&!_plataforma->esVehiculo(matricula));
+    if(matricula!="volver")
     {
-        do
-        {
-            cout<<"Introduzca la nueva matricula: ";
-            cin>>matricula;
+        list <Vehiculo>::iterator it = _plataforma->buscarVehiculo(matricula);
+        char opcion;
+        do{
+            cout<< "Introduzca el parámetro que desea modificar:"<<endl
+                << "\tA.\tMatricula"<<endl
+                << "\tB.\tCapacidad"<<endl
+                << "\tC.\tVolver"<<endl;
+            cin>> opcion;
             __fpurge(stdin);
         }
-        while(!_plataforma->validarMatricula(matricula) && _plataforma->esVehiculo(matricula));
-        string matriculaAntigua=it->getMatricula();
-        it->setMatricula(matricula); // hacer un set de la matricula
-        for(list <Reserva>::iterator it = _plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+        while((opcion<'A'||opcion>'C') && (opcion<'a'||opcion>'c'));
+        switch (opcion) {
+        case 'A': case 'a':
         {
-            if(matriculaAntigua == it->getMatricula()) it->setMatricula(matricula);
+            do
+            {
+                cout<<"Introduzca la nueva matricula: ";
+                cin>>matricula;
+                __fpurge(stdin);
+            }
+            while(!_plataforma->validarMatricula(matricula) && _plataforma->esVehiculo(matricula));
+            string matriculaAntigua=it->getMatricula();
+            it->setMatricula(matricula); // hacer un set de la matricula
+            for(list <Reserva>::iterator it = _plataforma->getReservas().begin();it!=_plataforma->getReservas().end();it++)
+            {
+                if(matriculaAntigua == it->getMatricula()) it->setMatricula(matricula);
+            }
+
+
+            break;
         }
-
-
-        break;
+        case 'B': case 'b':
+        {
+            unsigned int capacidad; // unsigned para prevenir que se introduzca una capacidad negativa
+            cout<<"Introduzca la nueva capacidad del vehiculo: ";
+            cin >> capacidad;
+            __fpurge(stdin);
+            it->setCapacidad(int(capacidad)); //hacer un set de la capacidad
+            break;
+        }
+        default:
+            break;
+        }
+        cout <<endl;
     }
-    case 'B': case 'b':
-    {
-        unsigned int capacidad; // unsigned para prevenir que se introduzca una capacidad negativa
-        cout<<"Introduzca la nueva capacidad del vehiculo: ";
-        cin >> capacidad;
-        __fpurge(stdin);
-        it->setCapacidad(int(capacidad)); //hacer un set de la capacidad
-        break;
-    }
-    default:
-        break;
-    }
-    cout <<endl;
 }
 
 void        Administrador::modUsuario()
 {
     string id;
     do{
-        cout << "Introduzca el id del usuario que desea modificar: ";
+        cout << "Introduzca el id del usuario que desea modificar: (teclee volver si desea volver al menu";
         cin >> id;
         __fpurge(stdin);
         
-    } while(!_plataforma->validacionId(id)||!_plataforma->existeUsuario(id));
+    } while(id!="volver"&&(!_plataforma->validacionId(id)||!_plataforma->existeUsuario(id)));
     string idn;
     do{
-        cout << "Introduzca el nuevo id: ";
+        cout << "Introduzca el nuevo id (teclee cancelar si asi lo quiere):";
         cin>>idn;
         __fpurge(stdin);
         if(_plataforma->existeUsuario(idn)) cerr << "Ya existe un usuario con dicho id"<<endl;
-    }while(_plataforma->existeUsuario(idn));
-    
-    if(_plataforma->esAdministrador(id))
-    {_plataforma->buscarAdministrador(id)->setID(idn);
-        cout<< endl << id <<" ahora identifica como " << idn <<endl;
+    }while(idn!="cancelar"&&_plataforma->existeUsuario(idn));
+    if(idn!="cancelar")
+    {
+        if(_plataforma->esAdministrador(id))
+        {_plataforma->buscarAdministrador(id)->setID(idn);
+            cout<< endl << id <<" ahora identifica como " << idn <<endl;
+        }
+        else if(_plataforma->esCliente(id))
+        {_plataforma->buscarCliente(id)->setID(idn);
+            cout<< endl << id <<" ahora identifica como " << idn <<endl;
+        }
+        else if(_plataforma->esVIP(id))
+        {_plataforma->buscarVIP(id)->setID(idn);
+            cout<< endl << id <<" ahora identifica como " << idn <<endl;
+        }
+        else cout << "Id no disponible. " <<endl;
     }
-    else if(_plataforma->esCliente(id))
-    {_plataforma->buscarCliente(id)->setID(idn);
-        cout<< endl << id <<" ahora identifica como " << idn <<endl;
-    }
-    else if(_plataforma->esVIP(id))
-    {_plataforma->buscarVIP(id)->setID(idn);
-        cout<< endl << id <<" ahora identifica como " << idn <<endl;
-    }
-    else cout << "Id no disponible. " <<endl;
 }
 
 void        Administrador::rmVehiculo()
@@ -169,12 +179,12 @@ void        Administrador::rmVehiculo()
     string matricula;
     do{
         
-        cout << "Introduzca la matrícula del vehiculo que desea eliminar: ";
+        cout << "Introduzca la matrícula del vehiculo que desea eliminar (teclee cancelar si quiere):";
         cin >> matricula;
         __fpurge(stdin);
     }
-    while(!_plataforma->validarMatricula(matricula) || !_plataforma->esVehiculo(matricula));
-    _plataforma->getVehiculos().erase(_plataforma->buscarVehiculo(matricula));
+    while(matricula!="cancelar"&&(!_plataforma->validarMatricula(matricula) || !_plataforma->esVehiculo(matricula)));
+    if(matricula!="cancelar") _plataforma->getVehiculos().erase(_plataforma->buscarVehiculo(matricula));
     
 }
 
@@ -183,15 +193,17 @@ void        Administrador::rmUsuario()
     string id;
     do{
         
-        cout << "Introduzca id del el usuario desea eliminar: ";
+        cout << "Introduzca id del el usuario desea eliminar (teclee cancelar si quiere): ";
         cin >> id;
         __fpurge(stdin);
     }
-    while(!_plataforma->validacionId(id));
-    
-    if(_plataforma->esAdministrador(id)) _plataforma->getAdministradores().erase(_plataforma->buscarAdministrador(id));
-    else if(_plataforma->esCliente(id)) _plataforma->getClientes().erase(_plataforma->buscarCliente(id));
-    else cout << "No existe un usuario con id " <<id<<endl;
+    while(id!="cancelar"&&!_plataforma->validacionId(id));
+    if(id!="cancelar")
+    {
+        if(_plataforma->esAdministrador(id)) _plataforma->getAdministradores().erase(_plataforma->buscarAdministrador(id));
+        else if(_plataforma->esCliente(id)) _plataforma->getClientes().erase(_plataforma->buscarCliente(id));
+        else cout << "No existe un usuario con id " <<id<<endl;
+    }
 }
 
 
@@ -335,7 +347,7 @@ void Administrador::historicoVehiculo()
                 cout<<"Matricula: "<<it->getMatricula()<<endl
                    <<"Usuario: "<<it->getId()<<endl
                   <<"Inicio: "<< it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl
-                <<"Fin: "<< it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl<<endl;
+                 <<"Fin: "<< it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl<<endl;
             }
         }
     }
@@ -360,7 +372,7 @@ void Administrador::historicoUsuario()
                 cout<<"Usuario: "<<it->getId()<<endl
                    <<"Matricula: "<<it->getMatricula()<<endl
                   <<"Inicio: "<< it->getInicio().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl
-                <<"Fin: "<< it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl<<endl;
+                 <<"Fin: "<< it->getFin().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl<<endl;
             }
         }
     }

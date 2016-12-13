@@ -7,6 +7,7 @@ void Plataforma::iniciar()
 {
 
     pullDatabase();
+    actualizarLoc();
     actualizarReservas();
     while(login()){actualizarReservas();}
     actualizarReservas();
@@ -16,7 +17,29 @@ void Plataforma::iniciar()
 
 
 
+void Plataforma::actualizarLoc()
+{
+    double loc[2];
+    for(list<Vehiculo>::iterator it = _vehiculos.begin(); it!=_vehiculos.end();it++)
+    {
 
+        loc[1] = randomloc(1);
+        loc[0] = randomloc(0);
+        it->setLocalizacion(loc);
+    }
+    for(list<Cliente>::iterator it = _clientes.begin(); it!=_clientes.end();it++)
+    {
+        loc[1] = randomloc(1);
+        loc[0] = randomloc(0);
+        it->setLocalizacion(loc);
+    }
+    for(list<VIP>::iterator it = _VIPs.begin(); it!=_VIPs.end();it++)
+    {
+        loc[1] = randomloc(1);
+        loc[0] = randomloc(0);
+        it->setLocalizacion(loc);
+    }
+}
 
 void Plataforma::pushDatabase()
 {
@@ -389,11 +412,8 @@ list<Reserva>& Plataforma::getReservas()
 double  Plataforma::randomloc(bool longlat)
 {
     double x;
-
-
-
-    if(longlat) x = double (4.6*sin(QDateTime::currentDateTime().time().msec()^2)-4.14);
-    else x = double (4*sin(QDateTime::currentDateTime().time().msec()^2)+39);
+    if(longlat) x = double (4.6*sin(QDateTime::currentDateTime().time().msec()*rand())-4.14);
+    else x = double (4*sin(QDateTime::currentDateTime().time().msec()^2*rand())+39);
     return x;
 }
 
@@ -405,7 +425,7 @@ bool Plataforma::login()
     string id;
 
     do{
-        cout<<endl<<QDateTime::currentDateTime().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl;
+        cout<<endl<<"\t\t"<<QDateTime::currentDateTime().toString("HH:mm 'de' dddd dd 'de' MMMM 'del' yyyy").toStdString()<<endl<<endl;
         cout<<"Por favor introduzca su ID de usuario para acceder al sistema"<<endl
            << "\t(si desea terminar el programa teclee salir)"<<endl<<endl
            <<"ID: ";
